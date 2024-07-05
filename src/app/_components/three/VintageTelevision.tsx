@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import React, { useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Html, Mask } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 
 interface GLTFAction extends THREE.AnimationClip {}
@@ -61,6 +61,25 @@ export function VintageTelevision(props: JSX.IntrinsicElements['group']) {
           geometry={nodes.Cube_5.geometry}
           material={materials['Material.005']}
         />
+        <Mask
+          geometry={nodes.Cube_5.geometry}
+          id={1}
+          colorWrite={false}
+          depthWrite={false}
+          castShadow
+          receiveShadow
+        >
+          <Html
+            position={[0.7, 0, 0]}
+            rotation={[0, Math.PI / 2, 0]}
+            transform
+            occlude="blending"
+          >
+            <div className="relative h-[66px] w-[70px] overflow-hidden pr-[17.5px] text-white">
+              <div className="h-full w-full rounded-[1px] bg-blue-200" />
+            </div>
+          </Html>
+        </Mask>
         <mesh
           geometry={nodes.Cube_6.geometry}
           material={materials['Material.008']}
