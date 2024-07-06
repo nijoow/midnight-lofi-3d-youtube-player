@@ -6,16 +6,16 @@ import { VintageTelevision } from './_components/three/VintageTelevision';
 
 export default function Home() {
   return (
-    <main className="h-screen w-screen">
+    <main className="relative h-screen w-screen bg-rose-600">
       <Canvas
-        className="h-screen w-screen bg-black"
-        camera={{ position: [2, 0, 0] }}
+        className="absolute left-0 top-0 z-0 h-screen w-screen"
+        camera={{ position: [1, 0, 0] }}
         shadows
       >
-        <OrbitControls />
+        <OrbitControls maxDistance={3.5} minDistance={2} />
         <Environment preset="studio" />
         <Suspense fallback={null}>
-          <VintageTelevision position={[0, 0, 0]} />
+          <VintageTelevision position={[0, -0.3, 0]} />
         </Suspense>
       </Canvas>
     </main>
