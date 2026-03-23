@@ -43,7 +43,17 @@ type ContextType = Record<
   React.ForwardRefExoticComponent<JSX.IntrinsicElements['mesh']>
 >;
 
-export function VintageTelevision(props: JSX.IntrinsicElements['group']) {
+interface VintageTelevisionProps {
+  videoId: string;
+  position?: [number, number, number];
+  onEnd?: () => void;
+}
+
+export function VintageTelevision({
+  videoId,
+  onEnd,
+  ...props
+}: VintageTelevisionProps) {
   const { nodes, materials } = useGLTF(
     '/3D/vintage-television.glb',
   ) as GLTFResult;
@@ -102,7 +112,7 @@ export function VintageTelevision(props: JSX.IntrinsicElements['group']) {
           className="relative aspect-[5/4] w-[800px] overflow-hidden rounded-sm"
         >
           <div className="h-full w-full">
-            <YoutubeVideo />
+            <YoutubeVideo videoId={videoId} onEnd={onEnd} />
           </div>
         </Html>
       </Mask>
