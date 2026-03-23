@@ -1,4 +1,4 @@
-# 📺 Midnight Lofi 3D Experience
+# 📺 Midnight Lofi 3D Youtube Player
 
 YouTube 플레이리스트 감상을 위한 몰입형 3D 환경 토이 프로젝트.
 
