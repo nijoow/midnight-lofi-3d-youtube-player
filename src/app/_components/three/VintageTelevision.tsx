@@ -47,11 +47,13 @@ interface VintageTelevisionProps {
   videoId: string;
   position?: [number, number, number];
   onEnd?: () => void;
+  onReady?: (event: { target: any }) => void;
 }
 
 export function VintageTelevision({
   videoId,
   onEnd,
+  onReady,
   ...props
 }: VintageTelevisionProps) {
   const { nodes, materials } = useGLTF(
@@ -112,7 +114,7 @@ export function VintageTelevision({
           className="relative aspect-[5/4] w-[800px] overflow-hidden rounded-sm"
         >
           <div className="h-full w-full">
-            <YoutubeVideo videoId={videoId} onEnd={onEnd} />
+            <YoutubeVideo videoId={videoId} onEnd={onEnd} onReady={onReady} />
           </div>
         </Html>
       </Mask>

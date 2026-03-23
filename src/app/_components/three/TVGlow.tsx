@@ -19,19 +19,16 @@ const TVGlow = () => {
     }
     if (beamRef.current) {
       beamRef.current.material instanceof THREE.MeshBasicMaterial &&
-        (beamRef.current.material.opacity = 0.04 + Math.sin(t * 1.5 + 1) * 0.01);
+        (beamRef.current.material.opacity =
+          0.04 + Math.sin(t * 1.5 + 1) * 0.01);
     }
   });
 
   return (
-    <group position={[0.4, -0.05, 0]}>
+    <group position={[0.28, -0.03, 0.35]}>
       {/* TV 앞에 퍼지는 소프트 글로우 */}
-      <mesh
-        ref={glowRef}
-        rotation={[0, Math.PI / 2, 0]}
-        position={[0.3, 0, 0]}
-      >
-        <planeGeometry args={[2.5, 2.0]} />
+      <mesh ref={glowRef} rotation={[0, Math.PI / 2, 0]} position={[0.3, 0, 0]}>
+        <planeGeometry args={[2.25, 1.75]} />
         <meshBasicMaterial
           color="#4488ff"
           transparent
@@ -43,11 +40,7 @@ const TVGlow = () => {
       </mesh>
 
       {/* TV 빛이 방 전체를 밝히는 넓은 글로우 */}
-      <mesh
-        ref={beamRef}
-        rotation={[0, Math.PI / 2, 0]}
-        position={[1.5, 0, 0]}
-      >
+      <mesh ref={beamRef} rotation={[0, Math.PI / 2, 0]} position={[1.5, 0, 0]}>
         <planeGeometry args={[6, 4]} />
         <meshBasicMaterial
           color="#2255cc"

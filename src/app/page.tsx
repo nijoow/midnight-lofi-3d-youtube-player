@@ -1,7 +1,7 @@
 'use client';
 import { Environment, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef } from 'react';
 import { VintageTelevision } from './_components/three/VintageTelevision';
 import Floor from './_components/three/Floor';
 import LightControler from './_components/three/LightControler';
@@ -9,17 +9,24 @@ import SoftParticles from './_components/three/SoftParticles';
 import { Furniture } from './_components/three/Furniture';
 import Room from './_components/three/Room';
 import TVGlow from './_components/three/TVGlow';
-import { FloatingControlButton } from './_components/ui/FloatingControlButton';
+import PlayerControls from './_components/ui/PlayerControls';
 import { YouTubeControlModal } from './_components/ui/YouTubeControlModal';
 
 export default function Home() {
-  const [playlist, setPlaylist] = useState([{
-    id: 'W6eCLgTC-64',
-    title:
-      '【𝗣𝗹𝗮𝘆𝗹𝗶𝘀𝘁】 온기가 머무는 순간 🐱 | 당신의 몰입을 위한 로파이 재즈 음악 🎧 | 휴식·공부·코딩·작업용 플리',
-  }]);
+  const [playlist, setPlaylist] = useState([
+    {
+      id: 'W6eCLgTC-64',
+      title:
+        '【𝗣𝗹𝗮𝘆𝗹𝗶𝘀𝘁】 온기가 머무는 순간 🐱 | 당신의 몰입을 위한 로파이 재즈 음악 🎧 | 휴식·공부·코딩·작업용 플리',
+    },
+  ]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [volume, setVolume] = useState(50);
+  const [isMuted, setIsMuted] = useState(false);
+  const [prevVolume, setPrevVolume] = useState(50);
+  const playerRef = useRef<any>(null);
 
   const currentVideo = playlist[currentIndex];
 
@@ -29,8 +36,46 @@ export default function Home() {
     }
   };
 
+  const handlePlayerReady = (event: { target: any }) => {
+    playerRef.current = event.target;
+    playerRef.current.setVolume(isMuted ? 0 : volume);
+    if (isPlaying) playerRef.current.playVideo();
+  };
+
+  const togglePlay = () => {
+    if (!playerRef.current) return;
+    if (isPlaying) {
+      playerRef.current.pauseVideo();
+    } else {
+      playerRef.current.playVideo();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    if (!playerRef.current) return;
+    if (isMuted) {
+      playerRef.current.setVolume(prevVolume);
+      setVolume(prevVolume);
+    } else {
+      setPrevVolume(volume);
+      playerRef.current.setVolume(0);
+    }
+    setIsMuted(!isMuted);
+  };
+
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    if (newVolume > 0 && isMuted) {
+      setIsMuted(false);
+    }
+    if (playerRef.current) {
+      playerRef.current.setVolume(newVolume);
+    }
+  };
+
   return (
-    <main className="relative h-screen w-screen bg-[#0d0804]">
+    <main className="relative h-screen w-screen bg-[#0d0804] select-none">
       <Canvas
         className="absolute left-0 top-0 z-0 h-screen w-screen"
         camera={{ position: [2.8, 0.3, 1.2], fov: 55 }}
@@ -40,8 +85,10 @@ export default function Home() {
         <OrbitControls
           maxDistance={5}
           minDistance={2.0}
-          maxPolarAngle={Math.PI * 0.62}
+          maxPolarAngle={Math.PI * 0.5} // Prevents looking below the target (Y=-0.2)
           minPolarAngle={Math.PI * 0.2}
+          minAzimuthAngle={0} // Prevents looking behind the TV left side
+          maxAzimuthAngle={Math.PI} // Prevents looking behind the TV right side
           enablePan={false}
           target={[0, -0.2, 0]}
           autoRotate={false}
@@ -55,6 +102,7 @@ export default function Home() {
             position={[0, -0.3, 0]}
             videoId={currentVideo?.id}
             onEnd={handleVideoEnd}
+            onReady={handlePlayerReady}
           />
           <TVGlow />
           <Floor />
@@ -63,18 +111,28 @@ export default function Home() {
       </Canvas>
 
       {/* UI Layer */}
-      <FloatingControlButton
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        isOpen={isModalOpen}
+      <PlayerControls
+        isPlaying={isPlaying}
+        onTogglePlay={togglePlay}
+        volume={volume}
+        onVolumeChange={handleVolumeChange}
+        onToggleMute={toggleMute}
+        isMuted={isMuted}
+        onTogglePlaylist={() => setIsModalOpen(!isModalOpen)}
+        isPlaylistOpen={isModalOpen}
       />
+
       <YouTubeControlModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         playlist={playlist}
         currentIndex={currentIndex}
-        onAddVideo={(video) => setPlaylist(prev => [...prev, video])}
-        onPlayVideo={(idx) => setCurrentIndex(idx)}
-        onRemoveVideo={(idx) => {
+        onAddVideo={video => setPlaylist(prev => [...prev, video])}
+        onPlayVideo={idx => {
+          setCurrentIndex(idx);
+          setIsPlaying(true);
+        }}
+        onRemoveVideo={idx => {
           setPlaylist(prev => prev.filter((_, i) => i !== idx));
           if (idx < currentIndex) setCurrentIndex(prev => prev - 1);
           else if (idx === currentIndex) setCurrentIndex(0);
