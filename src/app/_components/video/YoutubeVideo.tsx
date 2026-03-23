@@ -1,14 +1,20 @@
 import React from 'react';
 import YouTube from 'react-youtube';
 
-const YoutubeVideo = () => {
+interface YoutubeVideoProps {
+  videoId: string;
+  onEnd?: () => void;
+}
+
+const YoutubeVideo = ({ videoId, onEnd }: YoutubeVideoProps) => {
   return (
     <YouTube
-      videoId="xjjpTuG9GyU"
+      videoId={videoId}
+      onEnd={onEnd}
       opts={{
         height: '100%',
         width: '100%',
-        playerVars: { autoplay: 1, loop: 1, modestbranding: undefined, rel: 0 },
+        playerVars: { autoplay: 1, modestbranding: 1, rel: 0 },
       }}
       className="h-full w-full"
     />

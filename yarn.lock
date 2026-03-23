@@ -511,6 +511,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-three/postprocessing@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@react-three/postprocessing@npm:3.0.4"
+  dependencies:
+    maath: "npm:^0.6.0"
+    n8ao: "npm:^1.9.4"
+    postprocessing: "npm:^6.36.6"
+  peerDependencies:
+    "@react-three/fiber": ^9.0.0
+    react: ^19.0
+    three: ">= 0.156.0"
+  checksum: 10c0/7a9f6af37da29af6844bd8ad781ceafa2c2cee29954ccf6c41633b2afd4cf7da41eb668a62b3a942a35e400ac8c7685800394a96eed95dde9ec582decfdade5b
+  languageName: node
+  linkType: hard
+
 "@rushstack/eslint-patch@npm:^1.3.3":
   version: 1.10.3
   resolution: "@rushstack/eslint-patch@npm:1.10.3"
@@ -3137,6 +3152,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"maath@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "maath@npm:0.6.0"
+  peerDependencies:
+    "@types/three": ">=0.144.0"
+    three: ">=0.144.0"
+  checksum: 10c0/a9b716841d225338339fbe776c94e99f98136f24360e34c06698e2f1658bffc9b09321d2463e730810940de9801b73154de9afa6647595ae1d7b7662f4da6ef6
+  languageName: node
+  linkType: hard
+
 "make-fetch-happen@npm:^13.0.0":
   version: 13.0.1
   resolution: "make-fetch-happen@npm:13.0.1"
@@ -3346,6 +3371,16 @@ __metadata:
     object-assign: "npm:^4.0.1"
     thenify-all: "npm:^1.0.0"
   checksum: 10c0/103114e93f87362f0b56ab5b2e7245051ad0276b646e3902c98397d18bb8f4a77f2ea4a2c9d3ad516034ea3a56553b60d3f5f78220001ca4c404bd711bd0af39
+  languageName: node
+  linkType: hard
+
+"n8ao@npm:^1.9.4":
+  version: 1.10.1
+  resolution: "n8ao@npm:1.10.1"
+  peerDependencies:
+    postprocessing: ">=6.30.0"
+    three: ">=0.137"
+  checksum: 10c0/70aa6ad350e2dd241bc2a054eb084e4f82433b63ee5d456da037e13b657ffcfcdb86b17ea39c80f4c66ec7c5048508e0daf858f674ef1092bdd37dc6b01e1ff6
   languageName: node
   linkType: hard
 
@@ -3809,6 +3844,15 @@ __metadata:
     picocolors: "npm:^1.0.1"
     source-map-js: "npm:^1.2.0"
   checksum: 10c0/16f5ac3c4e32ee76d1582b3c0dcf1a1fdb91334a45ad755eeb881ccc50318fb8d64047de4f1601ac96e30061df203f0f2e2edbdc0bfc49b9c57bc9fb9bedaea3
+  languageName: node
+  linkType: hard
+
+"postprocessing@npm:^6.36.6, postprocessing@npm:^6.38.2":
+  version: 6.38.2
+  resolution: "postprocessing@npm:6.38.2"
+  peerDependencies:
+    three: ">= 0.157.0 < 0.183.0"
+  checksum: 10c0/e471381e4c61b3e33e2113667fca6c0cdfa0f700e446f83fe75112cd7984246250fa3b1e486517f5e2a3ad112e824326d4bc78b4a164bae4f5347801629ae0f1
   languageName: node
   linkType: hard
 
@@ -4674,6 +4718,7 @@ __metadata:
     "@react-spring/three": "npm:^9.7.3"
     "@react-three/drei": "npm:^9.108.1"
     "@react-three/fiber": "npm:^8.16.8"
+    "@react-three/postprocessing": "npm:^3.0.4"
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
@@ -4689,6 +4734,7 @@ __metadata:
     framer-motion: "npm:^11.2.13"
     next: "npm:14.2.4"
     postcss: "npm:^8"
+    postprocessing: "npm:^6.38.2"
     prettier: "npm:^3.3.2"
     prettier-plugin-tailwindcss: "npm:^0.6.5"
     react: "npm:^18"
