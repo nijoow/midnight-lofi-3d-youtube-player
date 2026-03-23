@@ -13,11 +13,13 @@ import { FloatingControlButton } from './_components/ui/FloatingControlButton';
 import { YouTubeControlModal } from './_components/ui/YouTubeControlModal';
 
 export default function Home() {
-  const [playlist, setPlaylist] = useState([{
-    id: 'W6eCLgTC-64',
-    title:
-      '【𝗣𝗹𝗮𝘆𝗹𝗶𝘀𝘁】 온기가 머무는 순간 🐱 | 당신의 몰입을 위한 로파이 재즈 음악 🎧 | 휴식·공부·코딩·작업용 플리',
-  }]);
+  const [playlist, setPlaylist] = useState([
+    {
+      id: 'W6eCLgTC-64',
+      title:
+        '【𝗣𝗹𝗮𝘆𝗹𝗶𝘀𝘁】 온기가 머무는 순간 🐱 | 당신의 몰입을 위한 로파이 재즈 음악 🎧 | 휴식·공부·코딩·작업용 플리',
+    },
+  ]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,8 +42,10 @@ export default function Home() {
         <OrbitControls
           maxDistance={5}
           minDistance={2.0}
-          maxPolarAngle={Math.PI * 0.62}
+          maxPolarAngle={Math.PI * 0.5} // Prevents looking below the target (Y=-0.2)
           minPolarAngle={Math.PI * 0.2}
+          minAzimuthAngle={0} // Prevents looking behind the TV left side
+          maxAzimuthAngle={Math.PI} // Prevents looking behind the TV right side
           enablePan={false}
           target={[0, -0.2, 0]}
           autoRotate={false}
@@ -72,9 +76,9 @@ export default function Home() {
         onClose={() => setIsModalOpen(false)}
         playlist={playlist}
         currentIndex={currentIndex}
-        onAddVideo={(video) => setPlaylist(prev => [...prev, video])}
-        onPlayVideo={(idx) => setCurrentIndex(idx)}
-        onRemoveVideo={(idx) => {
+        onAddVideo={video => setPlaylist(prev => [...prev, video])}
+        onPlayVideo={idx => setCurrentIndex(idx)}
+        onRemoveVideo={idx => {
           setPlaylist(prev => prev.filter((_, i) => i !== idx));
           if (idx < currentIndex) setCurrentIndex(prev => prev - 1);
           else if (idx === currentIndex) setCurrentIndex(0);
