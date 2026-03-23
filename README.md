@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📺 Midnight Lofi 3D Experience
 
-## Getting Started
+YouTube 플레이리스트 감상을 위한 몰입형 3D 환경 토이 프로젝트.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠️ 주요 기능 (Key Features)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🌌 몰입형 3D 환경 (Immersive 3D Environment)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **TV 화면 속 영상**: TV 화면 내에 Youtube Player를 맵핑하여 실감나게 구현.
+- **인터랙티브 카메라**: Orbit Controls을 통해 원하는 각도에서 공간을 탐색하고 감상 가능.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 🎥 원활한 YouTube 통합 (Seamless YouTube Integration)
 
-## Learn More
+- **커스텀 플레이리스트**: 나만의 영상 플레이리스트를 만들어 연속 영상 시청 가능.
+- **실시간 검색**: YouTube API 연동을 통해 영상을 검색 해서 플레이리스트에 추가 가능.
+- **직관적인 UI**: 하단 제어 컨트롤러 패널을 통해 재생, 볼륨 조절, 플레이리스트 관리.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 기술 스택 (Tech Stack)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Core**: [Next.js 14](https://nextjs.org/) (App Router)
+- **3D Engine**: [Three.js](https://threejs.org/) with [React Three Fiber](https://r3f.docs.pmnd.rs/getting-started/introduction)
+- **3D Utilities**: [@react-three/drei](https://github.com/pmndrs/drei)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Integration**: [react-youtube](https://github.com/tjallingt/react-youtube)
