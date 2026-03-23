@@ -4,13 +4,15 @@ import YouTube from 'react-youtube';
 interface YoutubeVideoProps {
   videoId: string;
   onEnd?: () => void;
+  onReady?: (event: { target: any }) => void;
 }
 
-const YoutubeVideo = ({ videoId, onEnd }: YoutubeVideoProps) => {
+const YoutubeVideo = ({ videoId, onEnd, onReady }: YoutubeVideoProps) => {
   return (
     <YouTube
       videoId={videoId}
       onEnd={onEnd}
+      onReady={onReady}
       opts={{
         height: '100%',
         width: '100%',
