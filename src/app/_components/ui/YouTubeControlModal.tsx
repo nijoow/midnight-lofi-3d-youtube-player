@@ -56,7 +56,7 @@ export const YouTubeControlModal = ({
 
       const response = await fetch(url);
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch YouTube videos');
       }
@@ -111,9 +111,9 @@ export const YouTubeControlModal = ({
             {/* Soft inner glow top edge */}
             <div className="pointer-events-none absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#5A3D31] to-transparent opacity-50" />
 
-            <div className="relative z-10 flex h-full flex-col font-serif text-[#E8E1D5]">
+            <div className="relative z-10 flex h-full flex-col font-sans text-[#E8E1D5]">
               {/* Header */}
-              <div className="mb-6 flex items-center justify-between border-b border-[#3A2E26] pb-4 shrink-0">
+              <div className="mb-6 flex shrink-0 items-center justify-between border-b border-[#3A2E26] pb-4">
                 <div className="flex items-center gap-3">
                   <div className="h-3 w-3 animate-pulse rounded-full bg-[#C28464] shadow-[0_0_8px_#C28464]" />
                   <h2 className="text-xl font-semibold tracking-wide text-[#E8E1D5]">
@@ -153,47 +153,53 @@ export const YouTubeControlModal = ({
                 }}
               />
 
-              <div className="flex flex-col md:flex-row gap-8 flex-1 min-h-0 overflow-hidden">
+              <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-hidden md:flex-row">
                 {/* Left Column: Playlist Queue & Current Info */}
-                <div className="flex flex-col w-full md:w-1/3 shrink-0">
+                <div className="flex w-full shrink-0 flex-col md:w-1/3">
                   {/* Current Video Info */}
-                  <div className="mb-6 rounded-xl border border-[#2A201A] bg-[#181411] p-4 shadow-inner shrink-0">
+                  <div className="mb-6 shrink-0 rounded-xl border border-[#2A201A] bg-[#181411] p-4 shadow-inner">
                     <div className="mb-1 font-sans text-xs uppercase tracking-widest text-[#8C7A6E]">
-                      Now Playing Signal
+                      Now Playing Video
                     </div>
                     <div className="flex items-center gap-2">
                       <span
                         className="line-clamp-2 font-sans text-base text-[#C28464]"
-                        dangerouslySetInnerHTML={{ __html: currentVideo?.title || 'No Signal' }}
+                        dangerouslySetInnerHTML={{
+                          __html: currentVideo?.title || 'No Signal',
+                        }}
                       />
                     </div>
                   </div>
 
                   {/* Playlist List */}
-                  <div className="mb-2 font-sans text-xs uppercase tracking-widest text-[#8C7A6E] shrink-0">
-                    Up Next / Queue
+                  <div className="mb-2 shrink-0 font-sans text-xs uppercase tracking-widest text-[#8C7A6E]">
+                    Playlist
                   </div>
-                  <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 mb-6 md:mb-0">
+                  <div className="custom-scrollbar mb-6 flex-1 overflow-y-auto pr-2 md:mb-0">
                     <div className="flex flex-col gap-2">
                       {playlist.map((item, idx) => (
-                        <div 
-                          key={idx + item.id} 
-                          className={`flex justify-between items-center rounded-lg border p-3 transition-colors ${
-                            idx === currentIndex 
-                              ? 'border-[#C28464]/50 bg-[#2A201A]' 
+                        <div
+                          key={idx + item.id}
+                          className={`flex items-center justify-between rounded-lg border p-3 transition-colors ${
+                            idx === currentIndex
+                              ? 'border-[#C28464]/50 bg-[#2A201A]'
                               : 'border-[#2A201A] bg-[#15120F] hover:bg-[#1A1613]'
                           }`}
                         >
-                          <button 
-                            className={`flex flex-1 text-left line-clamp-2 text-sm ${idx === currentIndex ? 'text-[#C28464]' : 'text-[#E8E1D5]'}`}
+                          <button
+                            className={`line-clamp-2 flex flex-1 text-left text-sm ${idx === currentIndex ? 'text-[#C28464]' : 'text-[#E8E1D5]'}`}
                             onClick={() => onPlayVideo(idx)}
                           >
-                            <span className="mr-2 font-mono text-[#8C7A6E]">{idx + 1}.</span>
-                            <span dangerouslySetInnerHTML={{ __html: item.title }} />
+                            <span className="mr-2 font-mono text-[#8C7A6E]">
+                              {idx + 1}.
+                            </span>
+                            <span
+                              dangerouslySetInnerHTML={{ __html: item.title }}
+                            />
                           </button>
-                          <button 
+                          <button
                             onClick={() => onRemoveVideo(idx)}
-                            className="ml-2 px-2 py-1 text-xs text-[#8C7A6E] transition hover:text-[#D9534F] font-sans rounded hover:bg-[#D9534F]/10"
+                            className="ml-2 rounded px-2 py-1 text-xs text-[#8C7A6E] transition hover:bg-[#D9534F]/10 hover:text-[#D9534F]"
                             title="Remove"
                           >
                             ✕
@@ -201,7 +207,7 @@ export const YouTubeControlModal = ({
                         </div>
                       ))}
                       {playlist.length === 0 && (
-                        <div className="p-4 text-center text-sm text-[#6B5A50] italic border border-dashed border-[#2A201A] rounded-lg">
+                        <div className="rounded-lg border border-dashed border-[#2A201A] p-4 text-center text-sm italic text-[#6B5A50]">
                           Playlist is empty
                         </div>
                       )}
@@ -210,9 +216,9 @@ export const YouTubeControlModal = ({
                 </div>
 
                 {/* Right Column: Search */}
-                <div className="flex flex-col flex-1 min-w-0">
+                <div className="flex min-w-0 flex-1 flex-col">
                   {/* Search Input Section */}
-                  <div className="relative mb-6 flex gap-4 shrink-0">
+                  <div className="relative mb-6 flex shrink-0 gap-4">
                     <div className="group relative flex-1">
                       <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
                         <svg
@@ -249,7 +255,7 @@ export const YouTubeControlModal = ({
 
                   {/* Error Message */}
                   {error && (
-                    <div className="mb-4 rounded-lg border border-[#D9534F]/30 bg-[#3A1D1A]/30 p-3 font-sans text-sm text-[#D9534F] shrink-0">
+                    <div className="mb-4 shrink-0 rounded-lg border border-[#D9534F]/30 bg-[#3A1D1A]/30 p-3 font-sans text-sm text-[#D9534F]">
                       [!] Connection lost: {error}
                     </div>
                   )}
@@ -311,7 +317,7 @@ export const YouTubeControlModal = ({
                                   title: video.title,
                                 })
                               }
-                              className="shrink-0 px-4 py-2 border border-[#965A46]/50 bg-[#804D3B]/20 hover:bg-[#804D3B]/80 text-[#C28464] hover:text-[#E8E1D5] rounded-lg transition-all shadow-sm font-sans text-sm tracking-wide flex items-center"
+                              className="flex shrink-0 items-center rounded-lg border border-[#965A46]/50 bg-[#804D3B]/20 px-4 py-2 font-sans text-sm tracking-wide text-[#C28464] shadow-sm transition-all hover:bg-[#804D3B]/80 hover:text-[#E8E1D5]"
                             >
                               <b className="mr-1">+</b> Add
                             </button>
@@ -321,20 +327,22 @@ export const YouTubeControlModal = ({
                     )}
 
                     {/* 무한 스크롤 / 더 보기 버튼 */}
-                    {nextPageToken && searchResults.length > 0 && !isLoading && !error && (
-                      <div className="mt-4 flex justify-center pb-2">
-                        <button
-                          onClick={() => handleSearch(true)}
-                          disabled={isLoadingMore}
-                          className="rounded-full border border-[#3A2E26] bg-[#1A1613] px-6 py-2 font-sans text-sm tracking-widest text-[#8C7A6E] transition-colors hover:bg-[#2A201A] hover:text-[#C28464] disabled:opacity-50"
-                        >
-                          {isLoadingMore ? 'LOADING...' : 'LOAD MORE'}
-                        </button>
-                      </div>
-                    )}
+                    {nextPageToken &&
+                      searchResults.length > 0 &&
+                      !isLoading &&
+                      !error && (
+                        <div className="mt-4 flex justify-center pb-2">
+                          <button
+                            onClick={() => handleSearch(true)}
+                            disabled={isLoadingMore}
+                            className="rounded-full border border-[#3A2E26] bg-[#1A1613] px-6 py-2 font-sans text-sm tracking-widest text-[#8C7A6E] transition-colors hover:bg-[#2A201A] hover:text-[#C28464] disabled:opacity-50"
+                          >
+                            {isLoadingMore ? 'LOADING...' : 'LOAD MORE'}
+                          </button>
+                        </div>
+                      )}
                   </div>
                 </div>
-
               </div>
             </div>
           </motion.div>
