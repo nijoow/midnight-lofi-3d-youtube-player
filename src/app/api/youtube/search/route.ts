@@ -1,60 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
+interface SearchItem {
+  id?: { videoId?: string };
+  snippet?: { title?: string; channelTitle?: string };
+}
+
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get('q');
-  const pageToken = searchParams.get('pageToken');
-
-  if (!query) {
-    return NextResponse.json(
-      { error: 'Query parameter is required' },
-      { status: 400 },
-    );
+  const query = request.nextUrl.searchParams.get('q')?.trim();
+  const pageToken = request.nextUrl.searchParams.get('pageToken');
+  if (!query || query.length > 200 || (pageToken?.length ?? 0) > 512) {
+    return NextResponse.json({ error: '검색어를 1~200자로 입력해 주세요.' }, { status: 400 });
   }
-
-  const API_KEY = process.env.YOUTUBE_API_KEY;
-
-  if (!API_KEY) {
-    return NextResponse.json(
-      { error: 'YouTube API key is missing. Please set YOUTUBE_API_KEY in your environment.' },
-      { status: 500 },
-    );
+  const apiKey = process.env.YOUTUBE_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json({ error: '지금 검색을 사용할 수 없어요. 잠시 후 다시 시도해 주세요.' }, { status: 503 });
   }
+  const params = new URLSearchParams({
+    part: 'snippet', type: 'video', q: query, maxResults: '10',
+    videoEmbeddable: 'true', videoSyndicated: 'true', key: apiKey,
+  });
+  if (pageToken) params.set('pageToken', pageToken);
 
   try {
-    let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&maxResults=10&key=${API_KEY}`;
-    
-    if (pageToken) {
-      url += `&pageToken=${pageToken}`;
-    }
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      const errData = await response.json();
-      console.error('YouTube API Error Data:', errData);
-      throw new Error(`YouTube API request failed: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    // 필요한 정보만 추출하여 반환 (기존 인터페이스 하위 호환)
-    const videos = data.items.map((item: any) => ({
-      id: item.id.videoId,
-      title: item.snippet.title,
-      thumbnail: item.snippet.thumbnails.medium.url,
-      channelTitle: item.snippet.channelTitle,
-    }));
-
-    return NextResponse.json({ 
-      items: videos,
-      nextPageToken: data.nextPageToken || null
+    const response = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`, {
+      signal: AbortSignal.timeout(10000),
     });
-  } catch (error) {
-    console.error('YouTube search error:', error);
-    return NextResponse.json(
-      { error: 'Failed to search YouTube videos' },
-      { status: 500 },
-    );
+    if (!response.ok) {
+      // Do not log provider payloads or URLs: they may contain credentials.
+      return NextResponse.json({ error: 'YouTube 검색을 사용할 수 없어요. 잠시 후 다시 시도해 주세요.' }, { status: 502 });
+    }
+    const data = await response.json();
+    if (!Array.isArray(data.items)) throw new Error('Invalid search response');
+    const items = (data.items as SearchItem[]).flatMap(item => {
+      const id = item.id?.videoId;
+      const title = item.snippet?.title;
+      if (!id || !/^[\w-]{11}$/.test(id) || typeof title !== 'string') return [];
+      return [{ id, title, thumbnail: `https://i.ytimg.com/vi/${id}/mqdefault.jpg`,
+        channelTitle: typeof item.snippet?.channelTitle === 'string' ? item.snippet.channelTitle : '' }];
+    });
+    return NextResponse.json({ items, nextPageToken: typeof data.nextPageToken === 'string' ? data.nextPageToken : null });
+  } catch {
+    return NextResponse.json({ error: '검색 연결이 지연되고 있어요. 다시 시도해 주세요.' }, { status: 502 });
   }
 }

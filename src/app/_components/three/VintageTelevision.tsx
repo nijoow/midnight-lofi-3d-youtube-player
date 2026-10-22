@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import React, { useRef } from 'react';
+import React from 'react';
+import type { YouTubeProps } from 'react-youtube';
 import { Html, Mask, useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import YoutubeVideo from '../video/YoutubeVideo';
@@ -47,13 +48,19 @@ interface VintageTelevisionProps {
   videoId: string;
   position?: [number, number, number];
   onEnd?: () => void;
-  onReady?: (event: { target: any }) => void;
+  onReady?: YouTubeProps['onReady'];
+  onStateChange?: YouTubeProps['onStateChange'];
+  onError?: YouTubeProps['onError'];
+  autoplay?: boolean;
 }
 
 export function VintageTelevision({
   videoId,
   onEnd,
   onReady,
+  onStateChange,
+  onError,
+  autoplay,
   ...props
 }: VintageTelevisionProps) {
   const { nodes, materials } = useGLTF(
@@ -114,7 +121,7 @@ export function VintageTelevision({
           className="relative aspect-[5/4] w-[800px] overflow-hidden rounded-sm"
         >
           <div className="h-full w-full">
-            <YoutubeVideo videoId={videoId} onEnd={onEnd} onReady={onReady} />
+            <YoutubeVideo videoId={videoId} onEnd={onEnd} onReady={onReady} onStateChange={onStateChange} onError={onError} autoplay={autoplay} />
           </div>
         </Html>
       </Mask>

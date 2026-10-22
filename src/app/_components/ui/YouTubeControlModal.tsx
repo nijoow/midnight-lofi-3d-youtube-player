@@ -1,5 +1,6 @@
-import { useState, KeyboardEvent, useRef } from 'react';
+import { useState, KeyboardEvent, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { decodeTitle } from '../../_lib/youtube';
 
 interface YouTubeVideoItem {
   id: string;
@@ -36,26 +37,36 @@ export const YouTubeControlModal = ({
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const currentVideo = playlist[currentIndex];
+  const requestRef = useRef<AbortController | null>(null);
+  const submittedQueryRef = useRef('');
+  useEffect(() => () => requestRef.current?.abort(), []);
 
   const handleSearch = async (loadMore = false) => {
-    if (!searchQuery.trim()) return;
+    const query = loadMore ? submittedQueryRef.current : searchQuery.trim();
+    if (!query || (loadMore && (!nextPageToken || isLoadingMore))) return;
+    requestRef.current?.abort();
+    const controller = new AbortController();
+    requestRef.current = controller;
 
     if (loadMore) {
       setIsLoadingMore(true);
     } else {
       setIsLoading(true);
       setNextPageToken(null);
+      setSearchResults([]);
+      submittedQueryRef.current = query;
     }
     setError(null);
 
     try {
-      let url = `/api/youtube/search?q=${encodeURIComponent(searchQuery)}`;
+      let url = `/api/youtube/search?q=${encodeURIComponent(query)}`;
       if (loadMore && nextPageToken) {
-        url += `&pageToken=${nextPageToken}`;
+        url += `&pageToken=${encodeURIComponent(nextPageToken)}`;
       }
 
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await fetch(url, { signal: controller.signal });
+      const data = await response.json().catch(() => ({ error: '검색 서버 응답을 읽지 못했어요. 다시 시도해 주세요.' }));
+      if (requestRef.current !== controller) return;
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch YouTube videos');
@@ -68,18 +79,21 @@ export const YouTubeControlModal = ({
       }
       setNextPageToken(data.nextPageToken || null);
     } catch (err) {
+      if (controller.signal.aborted || requestRef.current !== controller) return;
       setError(
         err instanceof Error ? err.message : 'An error occurred during search',
       );
-      console.error(err);
+
     } finally {
-      setIsLoading(false);
-      setIsLoadingMore(false);
+      if (requestRef.current === controller) {
+        setIsLoading(false);
+        setIsLoadingMore(false);
+      }
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       handleSearch(false);
     }
   };
@@ -122,6 +136,7 @@ export const YouTubeControlModal = ({
                 </div>
                 <button
                   onClick={onClose}
+                  aria-label="목록 닫기"
                   className="rounded-full p-2 text-[#8C7A6E] transition-colors hover:bg-[#2A201A] hover:text-[#E8E1D5]"
                 >
                   <svg
@@ -164,10 +179,9 @@ export const YouTubeControlModal = ({
                     <div className="flex items-center gap-2">
                       <span
                         className="line-clamp-2 font-sans text-base text-[#C28464]"
-                        dangerouslySetInnerHTML={{
-                          __html: currentVideo?.title || 'No Signal',
-                        }}
-                      />
+                      >
+                        {decodeTitle(currentVideo?.title || 'No Signal')}
+                      </span>
                     </div>
                   </div>
 
@@ -193,9 +207,7 @@ export const YouTubeControlModal = ({
                             <span className="mr-2 font-mono text-[#8C7A6E]">
                               {idx + 1}.
                             </span>
-                            <span
-                              dangerouslySetInnerHTML={{ __html: item.title }}
-                            />
+                            <span>{decodeTitle(item.title)}</span>
                           </button>
                           <button
                             onClick={() => onRemoveVideo(idx)}
@@ -241,6 +253,7 @@ export const YouTubeControlModal = ({
                         onChange={e => setSearchQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Search Videos..."
+                        aria-label="YouTube 검색어"
                         className="w-full rounded-t-lg border-b-2 border-[#3A2E26] bg-[#1A1613] py-4 pl-12 pr-4 font-sans text-[#E8E1D5] placeholder-[#6B5A50] transition-all focus:border-[#C28464] focus:bg-[#201B17] focus:outline-none"
                       />
                     </div>
@@ -295,19 +308,18 @@ export const YouTubeControlModal = ({
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={video.thumbnail}
-                                alt={video.title}
+                                alt={decodeTitle(video.title)}
                                 className="absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100"
                               />
                             </div>
                             <div className="flex min-w-0 flex-1 flex-col justify-center">
                               <h3
                                 className="mb-1 line-clamp-2 font-medium text-[#E8E1D5] transition-colors group-hover:text-[#C28464]"
-                                dangerouslySetInnerHTML={{
-                                  __html: video.title,
-                                }}
-                              />
+                              >
+                                {decodeTitle(video.title)}
+                              </h3>
                               <p className="mb-1 text-sm text-[#8C7A6E]">
-                                {video.channelTitle}
+                                {decodeTitle(video.channelTitle)}
                               </p>
                             </div>
                             <button

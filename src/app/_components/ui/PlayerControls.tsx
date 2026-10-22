@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 interface PlayerControlsProps {
   isPlaying: boolean;
+  hasVideo: boolean;
   onTogglePlay: () => void;
   volume: number;
   onVolumeChange: (value: number) => void;
@@ -16,6 +17,7 @@ interface PlayerControlsProps {
 
 const PlayerControls = ({
   isPlaying,
+  hasVideo,
   onTogglePlay,
   volume,
   onVolumeChange,
@@ -34,6 +36,8 @@ const PlayerControls = ({
         {/* Play / Pause */}
         <button
           onClick={onTogglePlay}
+          disabled={!hasVideo}
+          aria-label={isPlaying ? "음악 일시정지" : "음악 재생"}
           className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1A1613] text-[#C28464] border border-[#3A2E26] transition-colors hover:bg-[#2A201A] hover:text-[#E8E1D5]"
         >
           {isPlaying ? (
@@ -66,6 +70,7 @@ const PlayerControls = ({
           </button>
           <input
             type="range"
+            aria-label="음악 볼륨"
             min="0"
             max="100"
             value={isMuted ? 0 : volume}
@@ -77,6 +82,7 @@ const PlayerControls = ({
         {/* Playlist Toggle */}
         <button
           onClick={onTogglePlaylist}
+          aria-label="음악 목록"
           className={`relative flex h-10 w-10 items-center justify-center rounded-full border transition-all ${
             isPlaylistOpen
               ? 'bg-[#804D3B]/20 text-[#C28464] border-[#C28464]/50'
