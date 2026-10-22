@@ -29,8 +29,14 @@ export function useYouTubePlayer({
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     ref.current = null;
+  }, [activated, attempt]);
+  useEffect(() => {
     setError('');
     setStatus(videoId && activated ? 'loading' : 'idle');
+    if (!videoId) {
+      ref.current = null;
+      wantsPlayback.current = false;
+    }
   }, [videoId, activated, attempt]);
   useEffect(() => {
     const player = ref.current;
@@ -90,9 +96,19 @@ export function useYouTubePlayer({
   const onStateChange: NonNullable<YouTubeProps['onStateChange']> = useCallback(
     event => {
       if (event.data === 1) {
+        ref.current = event.target;
         setStatus('playing');
         setError('');
-      } else if (event.data === 2 || event.data === 5) setStatus('paused');
+      } else if (event.data === 5) {
+        ref.current = event.target;
+        // react-youtube cues a changed video on the existing iframe. Preserve
+        // the user's playback intent across that cue, including natural ends.
+        if (wantsPlayback.current) void event.target.playVideo();
+        else setStatus('paused');
+      } else if (event.data === 2) {
+        wantsPlayback.current = false;
+        setStatus('paused');
+      }
       else if (event.data === 0) setStatus('ended');
       else if (event.data === 3) setStatus('loading');
     },

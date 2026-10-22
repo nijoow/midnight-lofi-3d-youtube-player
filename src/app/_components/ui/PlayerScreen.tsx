@@ -32,7 +32,7 @@ export function PlayerScreen({
       <div className="video-monitor">
         {player.activated && track ? (
           <YouTube
-            key={track.id + '-' + player.attempt}
+            key={player.attempt}
             videoId={track.id}
             title={track.title}
             opts={OPTIONS}

@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { parseVideoId, type Track } from '../_lib/room';
+import { decodeYouTubeText } from '../_lib/youtube-text';
 export interface SearchTrack extends Track {
   thumbnail?: string;
 }
@@ -41,7 +42,6 @@ export function useYouTubeSearch() {
             data.error || '검색에 실패했어요. 잠시 후 다시 시도해 주세요.',
           );
         if (id !== sequence.current) return;
-        const decoder = document.createElement('textarea');
         const incoming: SearchTrack[] = (
           Array.isArray(data.items) ? data.items : []
         )
@@ -58,11 +58,11 @@ export function useYouTubeSearch() {
               channelTitle?: string;
               thumbnail?: string;
             }) => {
-              decoder.innerHTML = item.title;
               return {
                 id: item.id,
-                title: decoder.value.slice(0, 500),
-                channel: item.channelTitle,
+                title: decodeYouTubeText(item.title).slice(0, 500),
+                channel: typeof item.channelTitle === 'string'
+                  ? decodeYouTubeText(item.channelTitle).slice(0, 150) : undefined,
                 thumbnail:
                   typeof item.thumbnail === 'string' &&
                   item.thumbnail.startsWith('https://i.ytimg.com/')
