@@ -6,7 +6,7 @@ test('renders an offline 3D room and preserves controls after a lost WebGL conte
   const external: string[] = [];
   page.on('request', request => {
     if (
-      new URL(request.url()).origin !== 'http://127.0.0.1:3000' &&
+      new URL(request.url()).origin !== `http://127.0.0.1:${process.env.PORT || 3122}` &&
       !request.url().startsWith('data:')
     )
       external.push(request.url());

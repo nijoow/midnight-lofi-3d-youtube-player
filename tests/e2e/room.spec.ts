@@ -79,11 +79,14 @@ async function mockYouTube(page: Page) {
       stopVideo() {
         this.state = 0;
       }
-      loadVideoById() {
+      loadVideoById(options: {videoId: string}) {
+        this.options.videoId = options.videoId;
         this.playVideo();
       }
-      cueVideoById() {
+      cueVideoById(options: {videoId: string}) {
+        this.options.videoId = options.videoId;
         this.state = 5;
+        this.options.events.onStateChange({ target: this, data: 5 });
       }
       finish() {
         this.state = 0;
@@ -412,4 +415,23 @@ test('the original CRT keeps the same playing iframe through camera and 2D fallb
   ).toBe(true);
   await expect(page.locator('iframe')).toHaveCount(1);
   await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
+});
+
+
+test('natural end keeps the iframe and starts the next queued track', async ({ page }) => {
+  const tracks = [
+    { id: 'abcdefghijk', title: 'First' },
+    { id: 'lmnopqrstuv', title: 'Second' },
+  ];
+  await seed(page, { ...initial, playlist: tracks, currentId: tracks[0].id });
+  await mockYouTube(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: '음악 재생', exact: true }).click();
+  await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
+  await page.locator('iframe').evaluate(frame => frame.setAttribute('data-original', 'true'));
+  await page.evaluate(() => (window as unknown as {__player: {finish(): void}}).__player.finish());
+  await expect(page.getByRole('heading', {name: 'Second', exact: true})).toBeVisible();
+  await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
+  await expect(page.locator('iframe')).toHaveAttribute('data-original', 'true');
+  await expect.poll(() => page.evaluate(() => (window as unknown as {__calls: string[]}).__calls.at(-1))).toBe('play:lmnopqrstuv');
 });
