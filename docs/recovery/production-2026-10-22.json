@@ -1,0 +1,230 @@
+[
+  {
+    "file": ".eslintrc.json",
+    "sha": "afc3e3be8bfc0e2fd6255fd862ddcdd1beeba4b3",
+    "size": 124,
+    "mode": 33188
+  },
+  {
+    "file": ".yarn/releases/yarn-4.3.1.cjs",
+    "sha": "eea27c52538e84255b9d3a93cfda3bd543788f64",
+    "size": 2745559,
+    "mode": 33188
+  },
+  {
+    "file": ".yarnrc.yml",
+    "sha": "52fa76e82cf27ae94e11b2380cf5affaffeac134",
+    "size": 66,
+    "mode": 33188
+  },
+  {
+    "file": "next.config.mjs",
+    "sha": "07d312fa54a93897d18e711fe0eb197a2e01d780",
+    "size": 125,
+    "mode": 33188
+  },
+  {
+    "file": "package.json",
+    "sha": "c1ecdf719a69372c54d6f1853ff4fe00abf9ef42",
+    "size": 1070,
+    "mode": 33188
+  },
+  {
+    "file": "postcss.config.mjs",
+    "sha": "6f6d727c2eec648b9da91ae5b8f499b81c3f7c92",
+    "size": 135,
+    "mode": 33188
+  },
+  {
+    "file": "prettier.config.js",
+    "sha": "fb38a558faeb4df222053cc319791953f8f0caba",
+    "size": 221,
+    "mode": 33188
+  },
+  {
+    "file": "public/3D/vintage-television.glb",
+    "sha": "4834bf3fbf7c9ff63e66385d32e738d86649c11a",
+    "size": 6208840,
+    "mode": 33188
+  },
+  {
+    "file": "public/icon.svg",
+    "sha": "8226cf3e990c7d4ab553758bf07d0dc06aa5916d",
+    "size": 236,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/three/Furniture.tsx",
+    "sha": "90d72b2e5359e2957fbad72beff98afd862db875",
+    "size": 11310,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/three/Room.tsx",
+    "sha": "bbc60be08c7ff88f1225f532c94b76a8795c795c",
+    "size": 2141,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/three/RoomScene.tsx",
+    "sha": "24a054bd982e1cb1f8a18b7c526274ba6dd0cee8",
+    "size": 2094,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/three/VintageRoom.tsx",
+    "sha": "b337676ad23bf10391a23159524fc4df068ca4db",
+    "size": 7882,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/three/VintageTelevision.tsx",
+    "sha": "9a1508fd1761f7fbf2bcbef0ac21400eaa810443",
+    "size": 656,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/Dialog.tsx",
+    "sha": "11301fc0b47bea9a6d389c2747779e09fea09c5a",
+    "size": 1781,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/FocusPanel.tsx",
+    "sha": "8dde422f126d5054754d734026ed2acb34db7e4c",
+    "size": 2673,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/Icon.tsx",
+    "sha": "782b069b13bbcfb8701e46a0123fb503b6996a45",
+    "size": 2474,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/MusicLibrary.tsx",
+    "sha": "6b0137f486a6a503ff1a4688a3ca05aeab93b5c0",
+    "size": 9347,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/PlayerDock.tsx",
+    "sha": "4a16b836b6dc81894980089e7de79a849b976580",
+    "size": 4033,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/PlayerScreen.tsx",
+    "sha": "ed404ad213c4aa95bd4c4e2040ad19889987eb6c",
+    "size": 2834,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/ui/RoomSettings.tsx",
+    "sha": "1110ade59d17454cd3c471b6802f867f2006f84c",
+    "size": 3918,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_components/video/YouTubeEmbed.tsx",
+    "sha": "c8a6a586b1ccf79e3cf634c042cad9013380a23d",
+    "size": 169,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_hooks/useFocusTimer.ts",
+    "sha": "794521ea472badbdf7f1a0216897ad3e97489b04",
+    "size": 3311,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_hooks/useRoomState.ts",
+    "sha": "683d5e01d6ff314975596f639a365f4281b40e86",
+    "size": 1717,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_hooks/useSleepTimer.ts",
+    "sha": "7889934a272c718a7ee1c58b9fea7ee84123900b",
+    "size": 1596,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_hooks/useYouTubePlayer.ts",
+    "sha": "8cabddf1931e251719cf8fb213022d99f39e785d",
+    "size": 3848,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_hooks/useYouTubeSearch.ts",
+    "sha": "568b3ef012fdca9734ab7e0e57a7a849a73839d7",
+    "size": 3500,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_lib/room.ts",
+    "sha": "ed685126932aa372605d360b82150383e73e1bc7",
+    "size": 6670,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_lib/screen-projection.ts",
+    "sha": "1ac887a50f9d04873f7e0e91a9bd8ddca371c0a4",
+    "size": 1311,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_lib/timer.ts",
+    "sha": "7a99d3b302cae632db321d208e4e2185aeba71b1",
+    "size": 1269,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/_lib/youtube-search.ts",
+    "sha": "f77a50a9f446668cfdb196609987fd5ac30ed6bf",
+    "size": 6422,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/api/youtube/search/route.ts",
+    "sha": "b51d971bded2146a24118f82d126a6bb5494e5a8",
+    "size": 150,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/globals.css",
+    "sha": "72c87ebfe9beae9cf1f5a424bf720ae177630e2f",
+    "size": 28463,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/layout.tsx",
+    "sha": "e3b8aa344e5ca3eee8773352e8237e9530946715",
+    "size": 647,
+    "mode": 33188
+  },
+  {
+    "file": "src/app/page.tsx",
+    "sha": "534ab029f135cf66d9d84862e330636eeadc493f",
+    "size": 14476,
+    "mode": 33188
+  },
+  {
+    "file": "tailwind.config.ts",
+    "sha": "77c873fbb737425e5572f16ce9bc07b281b4b94c",
+    "size": 510,
+    "mode": 33188
+  },
+  {
+    "file": "tsconfig.json",
+    "sha": "a70ca8e297c774b225ae9ff05465e8740a7e7b3d",
+    "size": 602,
+    "mode": 33188
+  },
+  {
+    "file": "yarn.lock",
+    "sha": "b8ecdfa77189809d4488583b4e80997388812b0f",
+    "size": 225252,
+    "mode": 33188
+  }
+]
