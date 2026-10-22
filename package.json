@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test tests/*.test.cjs",
+    "typecheck": "tsc --noEmit",
+    "test:live-search": "node scripts/check-live-search.cjs",
+    "lint:player": "eslint src/app/_lib/youtube.ts src/app/api/youtube/search/route.ts src/app/page.tsx src/app/_components/ui/YouTubeControlModal.tsx src/app/_components/ui/PlayerControls.tsx src/app/_components/three/VintageTelevision.tsx src/app/_components/video/YoutubeVideo.tsx --no-eslintrc --config tests/eslint-review.json"
   },
   "dependencies": {
     "@react-spring/three": "^9.7.3",

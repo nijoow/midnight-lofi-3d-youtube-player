@@ -2,6 +2,8 @@
 import { Environment, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useState, useRef } from 'react';
+import type { YouTubeProps, YouTubePlayer } from 'react-youtube';
+import { nextIndex, removeFromQueue } from './_lib/youtube';
 import { VintageTelevision } from './_components/three/VintageTelevision';
 import Floor from './_components/three/Floor';
 import LightControler from './_components/three/LightControler';
@@ -22,34 +24,44 @@ export default function Home() {
   ]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [autoplay, setAutoplay] = useState(false);
+  const [playerError, setPlayerError] = useState('');
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
   const [prevVolume, setPrevVolume] = useState(50);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YouTubePlayer | null>(null);
 
   const currentVideo = playlist[currentIndex];
 
   const handleVideoEnd = () => {
-    if (currentIndex < playlist.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+    const next = nextIndex(currentIndex, playlist.length);
+    setIsPlaying(false);
+    if (next !== null) {
+      setAutoplay(true);
+      setCurrentIndex(next);
     }
   };
 
-  const handlePlayerReady = (event: { target: any }) => {
+  const handlePlayerReady: YouTubeProps['onReady'] = event => {
     playerRef.current = event.target;
-    playerRef.current.setVolume(isMuted ? 0 : volume);
-    if (isPlaying) playerRef.current.playVideo();
+    event.target.setVolume(isMuted ? 0 : volume);
+  };
+
+  const handlePlayerState: YouTubeProps['onStateChange'] = event => {
+    setIsPlaying(event.data === 1);
+    if (event.data === 1) setPlayerError('');
   };
 
   const togglePlay = () => {
-    if (!playerRef.current) return;
+    if (!playerRef.current || !currentVideo) return;
     if (isPlaying) {
       playerRef.current.pauseVideo();
     } else {
+      setAutoplay(true);
+      setPlayerError('');
       playerRef.current.playVideo();
     }
-    setIsPlaying(!isPlaying);
   };
 
   const toggleMute = () => {
@@ -103,6 +115,12 @@ export default function Home() {
             videoId={currentVideo?.id}
             onEnd={handleVideoEnd}
             onReady={handlePlayerReady}
+            onStateChange={handlePlayerState}
+            autoplay={autoplay}
+            onError={() => {
+              setIsPlaying(false);
+              setPlayerError('이 영상을 재생할 수 없어요. 목록에서 다른 음악을 선택해 주세요.');
+            }}
           />
           <TVGlow />
           <Floor />
@@ -111,8 +129,10 @@ export default function Home() {
       </Canvas>
 
       {/* UI Layer */}
+      {playerError && <p role="alert" className="fixed bottom-32 left-4 right-4 z-50 text-center text-[#E8E1D5]">{playerError}</p>}
       <PlayerControls
         isPlaying={isPlaying}
+        hasVideo={Boolean(currentVideo)}
         onTogglePlay={togglePlay}
         volume={volume}
         onVolumeChange={handleVolumeChange}
@@ -127,15 +147,23 @@ export default function Home() {
         onClose={() => setIsModalOpen(false)}
         playlist={playlist}
         currentIndex={currentIndex}
-        onAddVideo={video => setPlaylist(prev => [...prev, video])}
+        onAddVideo={video => setPlaylist(prev => prev.some(item => item.id === video.id) ? prev : [...prev, video])}
         onPlayVideo={idx => {
-          setCurrentIndex(idx);
-          setIsPlaying(true);
+          setAutoplay(true);
+          setPlayerError('');
+          if (idx === currentIndex) playerRef.current?.playVideo();
+          else setCurrentIndex(idx);
         }}
         onRemoveVideo={idx => {
-          setPlaylist(prev => prev.filter((_, i) => i !== idx));
-          if (idx < currentIndex) setCurrentIndex(prev => prev - 1);
-          else if (idx === currentIndex) setCurrentIndex(0);
+          const next = removeFromQueue({ tracks: playlist, index: currentIndex }, idx);
+          setPlaylist(next.tracks);
+          setCurrentIndex(next.index);
+          if (!next.tracks.length) {
+            playerRef.current?.stopVideo();
+            setIsPlaying(false);
+            setAutoplay(false);
+          }
+          setPlayerError('');
         }}
       />
     </main>
