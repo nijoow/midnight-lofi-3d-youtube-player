@@ -1,0 +1,239 @@
+{
+  "base": "67e4401c34050e8c029f2681622fd6eb951867e4",
+  "existingSourceCount": 27,
+  "finalSourceCount": 29,
+  "files": [
+    {
+      "path": "src/app/_components/three/Furniture.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 373,
+      "sha256Before": "d1d5fd79a85e1deab9ee327ecaf9d80b69f66684f38f2113d78845f87104743a",
+      "sha256After": "d1d5fd79a85e1deab9ee327ecaf9d80b69f66684f38f2113d78845f87104743a"
+    },
+    {
+      "path": "src/app/_components/three/Room.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 70,
+      "sha256Before": "1d0d361c00fab564debf9f83b30f4465488f87a59e83a3619062ffc2fd63529d",
+      "sha256After": "1d0d361c00fab564debf9f83b30f4465488f87a59e83a3619062ffc2fd63529d"
+    },
+    {
+      "path": "src/app/_components/three/RoomScene.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 81,
+      "sha256Before": "4c015f154558077c7bab2d0bc88108787f1338a1f1c3b08e9fe0be70e30aea01",
+      "sha256After": "4c015f154558077c7bab2d0bc88108787f1338a1f1c3b08e9fe0be70e30aea01"
+    },
+    {
+      "path": "src/app/_components/three/VintageRoom.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 251,
+      "sha256Before": "7c5a03106d5450146db0af05772c65389b8ab7a8e2222563c8037e8e96be67f1",
+      "sha256After": "7c5a03106d5450146db0af05772c65389b8ab7a8e2222563c8037e8e96be67f1"
+    },
+    {
+      "path": "src/app/_components/three/VintageTelevision.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 22,
+      "sha256Before": "b3d1fdfb54ef7342f97554e35020f6cfe24619d4bcbb8835eb30ab29786de7b7",
+      "sha256After": "b3d1fdfb54ef7342f97554e35020f6cfe24619d4bcbb8835eb30ab29786de7b7"
+    },
+    {
+      "path": "src/app/_components/ui/Dialog.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 72,
+      "sha256Before": "da5995c096aa594dff55e0478c0f4c4294e6e9b308d152103f141d11482b2d12",
+      "sha256After": "da5995c096aa594dff55e0478c0f4c4294e6e9b308d152103f141d11482b2d12"
+    },
+    {
+      "path": "src/app/_components/ui/FocusPanel.tsx",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 84,
+      "sha256Before": "fa05310133f5535adcf1d23bb232b6ca3040a3387c77cb8aaeadca110c00e08d",
+      "sha256After": "e91815e21d308837d2588799241ec43451c7114e64d9c3d70fb3492a066a9b1f"
+    },
+    {
+      "path": "src/app/_components/ui/Icon.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 89,
+      "sha256Before": "e59a2fc356086c20c300881290f980e701a3434a31bf6d117b8b937b940bb7ce",
+      "sha256After": "e59a2fc356086c20c300881290f980e701a3434a31bf6d117b8b937b940bb7ce"
+    },
+    {
+      "path": "src/app/_components/ui/MusicLibrary.tsx",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 281,
+      "sha256Before": "82e805e80b1295346877ec85481e66a1d7eec523c3e8e3e7184f3d6b4ba6019e",
+      "sha256After": "2a3078dd92cc741d6e3459bf3fb949fd325fdaef43984cff9bfb85618b3ba5f6"
+    },
+    {
+      "path": "src/app/_components/ui/PlayerDock.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 140,
+      "sha256Before": "c7023923b6cb9ca33547c280832c657d92a11c78461b4e521f4d458f02539353",
+      "sha256After": "c7023923b6cb9ca33547c280832c657d92a11c78461b4e521f4d458f02539353"
+    },
+    {
+      "path": "src/app/_components/ui/PlayerScreen.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 93,
+      "sha256Before": "deb115ba63adf791a6d06f374f0a0c62a7fe28fe999415773188d259bb2c04aa",
+      "sha256After": "deb115ba63adf791a6d06f374f0a0c62a7fe28fe999415773188d259bb2c04aa"
+    },
+    {
+      "path": "src/app/_components/ui/RoomSettings.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 116,
+      "sha256Before": "83c40a24c46050f6460a1b3318455eb65222917e18891a768906cae69a1e5857",
+      "sha256After": "83c40a24c46050f6460a1b3318455eb65222917e18891a768906cae69a1e5857"
+    },
+    {
+      "path": "src/app/_components/video/YouTubeEmbed.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 18,
+      "sha256Before": "d724465c3c41d8cfb3368d5e183a916da82ce79dac3f8e546f2fc0fa3b5c082a",
+      "sha256After": "d724465c3c41d8cfb3368d5e183a916da82ce79dac3f8e546f2fc0fa3b5c082a"
+    },
+    {
+      "path": "src/app/_hooks/useFocusTimer.ts",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 117,
+      "sha256Before": "ae9398498c2d08690a044866c837ea38e6ad2841b91a211fbc3630026b592700",
+      "sha256After": "be6f1b0b0f55c67a4378ef19d625d89711a41dfb000a37d704fd03e3a48bd1fd"
+    },
+    {
+      "path": "src/app/_hooks/useRoomState.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 57,
+      "sha256Before": "5d6dc4aa200561893f2371c514a295d027d6a056dbecbcb70d51edb37f47d107",
+      "sha256After": "5d6dc4aa200561893f2371c514a295d027d6a056dbecbcb70d51edb37f47d107"
+    },
+    {
+      "path": "src/app/_hooks/useSleepTimer.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 54,
+      "sha256Before": "ddf89b3442b1467c6a137603e83285569bea5926ee392ca8c86929d8a020aff6",
+      "sha256After": "ddf89b3442b1467c6a137603e83285569bea5926ee392ca8c86929d8a020aff6"
+    },
+    {
+      "path": "src/app/_hooks/useYouTubePlayer.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 146,
+      "sha256Before": "31bc1f83240253393deff9b3d35019d82582d36e58ac482835d6503350e5ebf3",
+      "sha256After": "31bc1f83240253393deff9b3d35019d82582d36e58ac482835d6503350e5ebf3"
+    },
+    {
+      "path": "src/app/_hooks/useYouTubeSearch.ts",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 98,
+      "sha256Before": "4ff9a4f5816cf63aa9eea9cec724daf26b4ee30c5cfbe257321f87bdc22f525a",
+      "sha256After": "a9e14ef87487a187072d029f76b8348e72d83051b3a1840c38381228e2272e7f"
+    },
+    {
+      "path": "src/app/_lib/room.ts",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 243,
+      "sha256Before": "fb0585d0004e4dcef93143fcc5105c7fe6bb73bbc59ffe065a9b8d3743cfbac1",
+      "sha256After": "2a2f15f8431100803bd5f548534adebced74c19b0f77b67a3616a293789ff49d"
+    },
+    {
+      "path": "src/app/_lib/screen-projection.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 56,
+      "sha256Before": "e9d44e7ef4a9c3f99079d163b40a4ecec5d8ecfe17fdf6152bc336a9acdb14cb",
+      "sha256After": "e9d44e7ef4a9c3f99079d163b40a4ecec5d8ecfe17fdf6152bc336a9acdb14cb"
+    },
+    {
+      "path": "src/app/_lib/timer.ts",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 47,
+      "sha256Before": "089b52e11bb408d9a271be4ee92c1a15c6368681565226b2bb2e53d50168bb89",
+      "sha256After": "6a00f04bd12f97ecf8cc3b7d5a1f0d71ebdbe7de5dcbd2f5e81d8b6d2cc35375"
+    },
+    {
+      "path": "src/app/_lib/youtube-search.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 202,
+      "sha256Before": "d5c90511a67a9e0046b05b81b2cc9d3e89011eff0b303838071ae2960ec11b49",
+      "sha256After": "d5c90511a67a9e0046b05b81b2cc9d3e89011eff0b303838071ae2960ec11b49"
+    },
+    {
+      "path": "src/app/_lib/youtube-text.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 14,
+      "sha256Before": "8e50303ef3221f5745343877b2559c0e774bf87860c59aa28c652a8444d13025",
+      "sha256After": "8e50303ef3221f5745343877b2559c0e774bf87860c59aa28c652a8444d13025"
+    },
+    {
+      "path": "src/app/api/youtube/search/route.ts",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 3,
+      "sha256Before": "a048a3cd25db22deb65361582da38512f601e866486523e5478361a5d1d70568",
+      "sha256After": "a048a3cd25db22deb65361582da38512f601e866486523e5478361a5d1d70568"
+    },
+    {
+      "path": "src/app/globals.css",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 1582,
+      "sha256Before": "a964825494f878986b84ee99c3c93ce48b7103c55567e715ddadc12074d007b2",
+      "sha256After": "a964825494f878986b84ee99c3c93ce48b7103c55567e715ddadc12074d007b2"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "reviewed": true,
+      "disposition": "retained",
+      "baselineLines": 23,
+      "sha256Before": "cbf5c3ca4c5a5ea0749a82c11df68ea9c89d07c839a30920312c78e31d4eed60",
+      "sha256After": "cbf5c3ca4c5a5ea0749a82c11df68ea9c89d07c839a30920312c78e31d4eed60"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "reviewed": true,
+      "disposition": "changed",
+      "baselineLines": 449,
+      "sha256Before": "b8b190ba3e52dc17c1674b0998969f2b664adc8d9cb44ca097b26136d9a6f9c9",
+      "sha256After": "396cc123e210c2bfef05368b1953c6385599983e2a94c679bc4317a1bc6ea69d"
+    },
+    {
+      "path": "src/app/_hooks/usePlaylistPlayback.ts",
+      "reviewed": true,
+      "disposition": "added",
+      "baselineLines": 0,
+      "sha256Before": null,
+      "sha256After": "0d7b987f9f40bfa59cdd68acbf9fa41fa850c321e72d85970c435fac6e0b5636"
+    },
+    {
+      "path": "src/app/_lib/search-results.ts",
+      "reviewed": true,
+      "disposition": "added",
+      "baselineLines": 0,
+      "sha256Before": null,
+      "sha256After": "f126fb1d8fa9ac4055ca98dff1a12fddf3cf4f569356f56c64a9c9c5a849d812"
+    }
+  ]
+}
