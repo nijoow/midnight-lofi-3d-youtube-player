@@ -1,0 +1,70 @@
+
+> midnight-room@0.2.0 test:e2e
+> playwright test
+
+[WebServer] (node:4168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:4171) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:4292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/room.spec.ts:105:5 › saves mood, volume and view without autoplay, and restores them after refresh (2.8s)
+  ✓   2 tests/e2e/room.spec.ts:127:5 › re-selecting a paused track resumes playback and the last track ending clears playing state (1.5s)
+  ✓   3 tests/e2e/room.spec.ts:160:5 › empty queue stops the player and accepts a new URL without duplicate tracks (1.6s)
+  ✓   4 tests/e2e/room.spec.ts:193:5 › search pagination stays attached to its submitted query and stale responses cannot replace new results (1.6s)
+  ✓   5 tests/e2e/room.spec.ts:248:5 › mobile long queues keep search accessible and dialogs close with Escape and restore focus (1.1s)
+  ✓   6 tests/e2e/room.spec.ts:273:5 › focus timer survives refresh, pauses accurately, and completes only once after a long background interval (1.8s)
+  ✓   7 tests/e2e/room.spec.ts:314:5 › playback errors are recoverable and do not stop focus controls (1.4s)
+  ✓   8 tests/e2e/room.spec.ts:343:5 › sleep timer pauses music after the selected duration (1.4s)
+  ✓   9 tests/e2e/room.spec.ts:364:5 › the original CRT keeps the same playing iframe through camera and 2D fallback changes (3.1s)
+  ✓  10 tests/e2e/room.spec.ts:421:5 › natural end keeps the iframe and starts the next queued track (1.2s)
+  ✓  11 tests/e2e/room.spec.ts:453:5 › queue reordering, selecting a newly added recommendation and deleting it preserve playback contracts (2.5s)
+  ✘  12 tests/e2e/room.spec.ts:475:5 › search reports unreadable responses, recovers on retry and retains a draft across close/reopen (1.0s)
+(node:4502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 tests/e2e/room.spec.ts:497:5 › canceling and replacing a sleep deadline leaves music playing until the new deadline (1.5s)
+  ✓  14 tests/e2e/scene.spec.ts:3:5 › renders an offline 3D room and preserves controls after a lost WebGL context (2.4s)
+
+
+  1) tests/e2e/room.spec.ts:475:5 › search reports unreadable responses, recovers on retry and retains a draft across close/reopen
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected: "검색 결과를 읽지 못했어요. 다시 시도해 주세요."
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert" class="inline-error">검색 결과를 읽지 못했어요. 다시 시도해 주세요.</p> aka getByText('검색 결과를 읽지 못했어요. 다시 시도해 주세요')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toHaveText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        - locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+        - unexpected value ""
+
+
+      485 |   await input.fill('my music');
+      486 |   await input.press('Enter');
+    > 487 |   await expect(page.getByRole('alert')).toHaveText('검색 결과를 읽지 못했어요. 다시 시도해 주세요.');
+          |                                         ^
+      488 |   await input.press('Enter');
+      489 |   await expect(page.getByRole('button', { name: 'Recovered & safe 재생' })).toBeVisible();
+      490 |   await input.fill('unfinished draft');
+        at /Users/woojin/Documents/Codex/2026-10-29/task/player-refactor/tests/e2e/room.spec.ts:487:41
+
+    Error Context: test-results/room-search-reports-unread-bb648-a-draft-across-close-reopen/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/room-search-reports-unread-bb648-a-draft-across-close-reopen/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/room-search-reports-unread-bb648-a-draft-across-close-reopen/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/e2e/room.spec.ts:475:5 › search reports unreadable responses, recovers on retry and retains a draft across close/reopen
+  13 passed (34.8s)

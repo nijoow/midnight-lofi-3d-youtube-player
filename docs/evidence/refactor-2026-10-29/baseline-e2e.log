@@ -1,0 +1,26 @@
+
+> midnight-room@0.2.0 test:e2e
+> playwright test
+
+[WebServer] (node:2747) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 11 tests using 1 worker
+
+(node:2784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/room.spec.ts:105:5 › saves mood, volume and view without autoplay, and restores them after refresh (1.7s)
+  ✓   2 tests/e2e/room.spec.ts:127:5 › re-selecting a paused track resumes playback and the last track ending clears playing state (1.6s)
+  ✓   3 tests/e2e/room.spec.ts:160:5 › empty queue stops the player and accepts a new URL without duplicate tracks (1.5s)
+  ✓   4 tests/e2e/room.spec.ts:193:5 › search pagination stays attached to its submitted query and stale responses cannot replace new results (1.6s)
+  ✓   5 tests/e2e/room.spec.ts:248:5 › mobile long queues keep search accessible and dialogs close with Escape and restore focus (1.0s)
+  ✓   6 tests/e2e/room.spec.ts:273:5 › focus timer survives refresh, pauses accurately, and completes only once after a long background interval (1.6s)
+  ✓   7 tests/e2e/room.spec.ts:314:5 › playback errors are recoverable and do not stop focus controls (1.4s)
+  ✓   8 tests/e2e/room.spec.ts:343:5 › sleep timer pauses music after the selected duration (1.3s)
+  ✓   9 tests/e2e/room.spec.ts:364:5 › the original CRT keeps the same playing iframe through camera and 2D fallback changes (3.6s)
+  ✓  10 tests/e2e/room.spec.ts:421:5 › natural end keeps the iframe and starts the next queued track (1.3s)
+  ✓  11 tests/e2e/scene.spec.ts:3:5 › renders an offline 3D room and preserves controls after a lost WebGL context (2.7s)
+
+  11 passed (29.5s)
