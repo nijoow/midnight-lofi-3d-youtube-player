@@ -7,6 +7,7 @@ export interface TimerState {
   seconds: number;
   completed: number;
 }
+export const BREAK_SECONDS = 5 * 60;
 export const initialTimer: TimerState = {
   mode: 25,
   phase: 'focus',
@@ -39,9 +40,55 @@ export function reconcileTimer(
       phase: wasFocus ? 'break' : 'focus',
       running: false,
       anchor: null,
-      seconds: wasFocus ? 5 * 60 : timer.mode * 60,
+      seconds: wasFocus ? BREAK_SECONDS : timer.mode * 60,
       completed: timer.completed + (wasFocus ? 1 : 0),
     },
     finished: true,
   };
+}
+
+/** Validate session data independently from browser storage and timer effects. */
+export function restoreTimer(
+  raw: string | null,
+  now: number,
+): TimerState | null {
+  if (!raw) return null;
+  try {
+    const saved: unknown = JSON.parse(raw);
+    if (!saved || typeof saved !== 'object') return null;
+    if (
+      !('mode' in saved) ||
+      (saved.mode !== 0 && saved.mode !== 25 && saved.mode !== 50) ||
+      !('phase' in saved) ||
+      (saved.phase !== 'focus' && saved.phase !== 'break') ||
+      !('running' in saved) ||
+      typeof saved.running !== 'boolean' ||
+      !('seconds' in saved) ||
+      typeof saved.seconds !== 'number' ||
+      !Number.isFinite(saved.seconds) ||
+      saved.seconds < 0 ||
+      saved.seconds > 86400 ||
+      !('completed' in saved) ||
+      typeof saved.completed !== 'number' ||
+      !Number.isInteger(saved.completed) ||
+      saved.completed < 0 ||
+      !('anchor' in saved) ||
+      (saved.anchor !== null &&
+        (typeof saved.anchor !== 'number' ||
+          !Number.isFinite(saved.anchor) ||
+          saved.anchor > now)) ||
+      (saved.running && saved.anchor === null)
+    )
+      return null;
+    return {
+      mode: saved.mode,
+      phase: saved.phase,
+      running: saved.running,
+      seconds: saved.seconds,
+      completed: saved.completed,
+      anchor: saved.anchor,
+    };
+  } catch {
+    return null;
+  }
 }

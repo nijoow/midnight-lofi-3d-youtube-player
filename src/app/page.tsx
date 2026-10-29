@@ -11,18 +11,9 @@ import { Icon, type IconName } from './_components/ui/Icon';
 import { Dialog } from './_components/ui/Dialog';
 import { useRoomState } from './_hooks/useRoomState';
 import { useFocusTimer } from './_hooks/useFocusTimer';
-import { useYouTubePlayer } from './_hooks/useYouTubePlayer';
+import { usePlaylistPlayback } from './_hooks/usePlaylistPlayback';
 import { useSleepTimer } from './_hooks/useSleepTimer';
-import {
-  MOODS,
-  formatTime,
-  adjacentTrack,
-  moveTrack,
-  removeTrack,
-  type CameraView,
-  type Mood,
-  type Track,
-} from './_lib/room';
+import { MOODS, formatTime, type CameraView, type Mood } from './_lib/room';
 
 const MOOD_ICONS: Record<Mood, IconName> = {
   rain: 'rain',
@@ -47,27 +38,8 @@ export default function Home() {
   const [notice, setNotice] = useState('');
   const [cameraRevision, setCameraRevision] = useState(0);
   const focus = useFocusTimer();
-  const currentTrack = room.playlist.find(track => track.id === room.currentId);
-  const player = useYouTubePlayer({
-    videoId: currentTrack?.id ?? null,
-    volume: preferences.volume,
-    muted: preferences.muted,
-    onEnded: () => {
-      const next = adjacentTrack(
-        room.playlist,
-        room.currentId,
-        1,
-        preferences.repeat,
-        true,
-      );
-      if (!next) return;
-      if (next === room.currentId) player.play();
-      else {
-        player.prepare();
-        setRoom(prev => ({ ...prev, currentId: next }));
-      }
-    },
-  });
+  const playback = usePlaylistPlayback(room, setRoom);
+  const { currentTrack, player } = playback;
   const sleep = useSleepTimer(() => {
     player.pause();
     setNotice('취침 예약 시간이 되어 음악을 멈췄어요.');
@@ -91,46 +63,6 @@ export default function Home() {
       '이 기기에서는 2D 방으로 전환했어요. 음악과 타이머는 그대로 사용할 수 있어요.',
     );
   }, [updatePreferences]);
-  const selectTrack = (id: string) => {
-    if (id === room.currentId) {
-      player.play();
-      return;
-    }
-    player.prepare();
-    setRoom(prev => ({
-      ...prev,
-      currentId: prev.playlist.some(track => track.id === id)
-        ? id
-        : prev.currentId,
-    }));
-  };
-  const navigateTrack = (direction: -1 | 1) => {
-    const id = adjacentTrack(
-      room.playlist,
-      room.currentId,
-      direction,
-      preferences.repeat,
-    );
-    if (id) selectTrack(id);
-  };
-  const addTrack = (track: Track) => {
-    if (
-      room.playlist.some(item => item.id === track.id) ||
-      room.playlist.length >= 200
-    )
-      return false;
-    setRoom(prev =>
-      prev.playlist.some(item => item.id === track.id) ||
-      prev.playlist.length >= 200
-        ? prev
-        : {
-            ...prev,
-            playlist: [...prev.playlist, track],
-            currentId: prev.currentId ?? track.id,
-          },
-    );
-    return true;
-  };
   const togglePlayback = player.toggle;
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
@@ -336,16 +268,10 @@ export default function Home() {
                   : 'off',
           })
         }
-        onPrevious={() => navigateTrack(-1)}
-        onNext={() => navigateTrack(1)}
-        canPrevious={
-          room.playlist.length > 1 &&
-          !!adjacentTrack(room.playlist, room.currentId, -1, preferences.repeat)
-        }
-        canNext={
-          room.playlist.length > 1 &&
-          !!adjacentTrack(room.playlist, room.currentId, 1, preferences.repeat)
-        }
+        onPrevious={() => playback.navigateTrack(-1)}
+        onNext={() => playback.navigateTrack(1)}
+        canPrevious={playback.canPrevious}
+        canNext={playback.canNext}
         onLibrary={openMusic}
       />
       <footer className="app-footer">
@@ -366,18 +292,10 @@ export default function Home() {
         onClose={() => setPanel(null)}
         playlist={room.playlist}
         currentId={room.currentId}
-        onAdd={addTrack}
-        onSelect={selectTrack}
-        onRemove={id => {
-          if (id === room.currentId) player.pause();
-          setRoom(prev => removeTrack(prev, id));
-        }}
-        onMove={(id, direction) =>
-          setRoom(prev => ({
-            ...prev,
-            playlist: moveTrack(prev.playlist, id, direction),
-          }))
-        }
+        onAdd={playback.addTrack}
+        onSelect={playback.selectTrack}
+        onRemove={playback.removeTrack}
+        onMove={playback.moveTrack}
       />
       <RoomSettings
         open={panel === 'settings'}

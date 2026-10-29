@@ -69,3 +69,16 @@ test('repeat modes and reordering respect playlist boundaries', () => {
   assert.deepEqual(moveTrack([a, b, c], b.id, -1), [b, a, c]);
   assert.deepEqual(moveTrack([a, b], a.id, -1), [a, b]);
 });
+
+test('adding tracks preserves selection, rejects duplicates and caps the queue', async () => {
+  const { appendTrack, canAddTrack, MAX_PLAYLIST_TRACKS } = await import('../../src/app/_lib/room');
+  const empty = { ...DEFAULT_ROOM, playlist: [], currentId: null };
+  const first = appendTrack(empty, a);
+  assert.equal(first.currentId, a.id);
+  assert.equal(appendTrack(first, b).currentId, a.id);
+  assert.equal(appendTrack(first, a), first);
+  assert.deepEqual(empty.playlist, []);
+  const full = { ...first, playlist: Array.from({ length: MAX_PLAYLIST_TRACKS }, (_, i) => ({ id: String(i).padStart(11, '0'), title: 'Track ' + i })) };
+  assert.equal(canAddTrack(full.playlist, a.id), false);
+  assert.equal(appendTrack(full, a), full);
+});

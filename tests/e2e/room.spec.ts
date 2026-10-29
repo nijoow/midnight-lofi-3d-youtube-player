@@ -449,3 +449,67 @@ test('natural end keeps the iframe and starts the next queued track', async ({ p
   await page.getByRole('button', {name: '음악 일시정지', exact: true}).click();
   await expect(page.getByText('일시정지', {exact: true})).toBeVisible();
 });
+
+test('queue reordering, selecting a newly added recommendation and deleting it preserve playback contracts', async ({ page }) => {
+  await seed(page);
+  await mockYouTube(page);
+  await page.goto('/');
+  await openMusic(page);
+  await page.getByRole('button', { name: 'lofi hip hop radio · beats to relax/study to 재생', exact: true }).click();
+  await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'lofi hip hop radio · beats to relax/study to', exact: true })).toBeVisible();
+  await openMusic(page);
+  await page.getByRole('tab', { name: /내 목록/ }).click();
+  await page.getByRole('button', { name: 'lofi hip hop radio · beats to relax/study to 위로 이동', exact: true }).click();
+  await expect(page.locator('.track-list li').first()).toContainText('lofi hip hop radio');
+  await page.getByRole('button', { name: 'lofi hip hop radio · beats to relax/study to 삭제', exact: true }).click();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('heading', { name: DEFAULT_ROOM.playlist[0].title, exact: true })).toBeVisible();
+  await expect(page.getByText('일시정지', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.locator('iframe')).toHaveCount(0);
+  await openMusic(page);
+  await expect(page.getByRole('tab', { name: '내 목록 · 1' })).toBeVisible();
+});
+
+test('search reports unreadable responses, recovers on retry and retains a draft across close/reopen', async ({ page }) => {
+  await seed(page);
+  let attempt = 0;
+  await page.route('**/api/youtube/search?*', route => route.fulfill({ json: ++attempt === 1 ? null : {
+    items: [null, { id: 'abcdefghijk', title: 'Recovered &amp; safe', channelTitle: 'Artist' }], nextPageToken: null,
+  } }));
+  await page.goto('/');
+  await openMusic(page);
+  await page.getByRole('tab', { name: 'YouTube 검색' }).click();
+  const input = page.getByRole('textbox', { name: 'YouTube 검색어' });
+  await input.fill('my music');
+  await input.press('Enter');
+  await expect(page.getByRole('dialog', { name: '음악', exact: true }).getByRole('alert')).toHaveText('검색 결과를 읽지 못했어요. 다시 시도해 주세요.');
+  await input.press('Enter');
+  await expect(page.getByRole('button', { name: 'Recovered & safe 재생' })).toBeVisible();
+  await input.fill('unfinished draft');
+  await page.keyboard.press('Escape');
+  await openMusic(page);
+  await expect(input).toHaveValue('unfinished draft');
+  await expect(page.getByRole('button', { name: 'Recovered & safe 재생' })).toBeVisible();
+});
+
+test('canceling and replacing a sleep deadline leaves music playing until the new deadline', async ({ page }) => {
+  await seed(page);
+  await mockYouTube(page);
+  await page.clock.install();
+  await page.goto('/');
+  await page.getByRole('button', { name: '음악 재생', exact: true }).click();
+  await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '방 설정', exact: true }).click();
+  await page.getByLabel('음악을 멈출 시간').selectOption('30');
+  await page.getByRole('button', { name: '예약 취소', exact: true }).click();
+  await page.clock.fastForward(31 * 60000);
+  await expect(page.locator('.sleep-status')).toHaveCount(0);
+  await page.getByLabel('음악을 멈출 시간').selectOption('60');
+  await page.keyboard.press('Escape');
+  await page.clock.fastForward(30 * 60000);
+  await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
+  await page.clock.fastForward(30 * 60000);
+  await expect(page.getByText('일시정지', { exact: true })).toBeVisible();
+});

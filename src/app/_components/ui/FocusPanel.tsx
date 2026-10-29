@@ -1,3 +1,4 @@
+import { BREAK_SECONDS } from '../../_lib/timer';
 import { formatTime } from '../../_lib/room';
 import type { useFocusTimer } from '../../_hooks/useFocusTimer';
 import { Icon } from './Icon';
@@ -7,7 +8,7 @@ export function FocusPanel({
   focus: ReturnType<typeof useFocusTimer>;
 }) {
   const { timer, remaining, toggle, selectMode, reset, notice } = focus;
-  const total = timer.phase === 'break' ? 300 : timer.mode * 60;
+  const total = timer.phase === 'break' ? BREAK_SECONDS : timer.mode * 60;
   const progress = total ? Math.min(100, (1 - remaining / total) * 100) : 0;
   return (
     <section

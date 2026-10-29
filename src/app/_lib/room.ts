@@ -23,6 +23,7 @@ export interface SavedRoom {
   playlist: Track[];
   currentId: string | null;
 }
+export const MAX_PLAYLIST_TRACKS = 200;
 export const STORAGE_KEY = 'midnight-room:v1';
 export const MOODS = {
   rain: {
@@ -153,7 +154,7 @@ export function restoreRoom(raw: string | null): SavedRoom | null {
       new Map<string, Track>(
         data.playlist
           .filter(isTrack)
-          .slice(0, 200)
+          .slice(0, MAX_PLAYLIST_TRACKS)
           .map((t: Track) => [
             t.id,
             {
@@ -192,6 +193,20 @@ export function restoreRoom(raw: string | null): SavedRoom | null {
   } catch {
     return null;
   }
+}
+export function canAddTrack(playlist: Track[], id: string): boolean {
+  return (
+    playlist.length < MAX_PLAYLIST_TRACKS &&
+    !playlist.some(track => track.id === id)
+  );
+}
+export function appendTrack(room: SavedRoom, track: Track): SavedRoom {
+  if (!canAddTrack(room.playlist, track.id)) return room;
+  return {
+    ...room,
+    playlist: [...room.playlist, track],
+    currentId: room.currentId ?? track.id,
+  };
 }
 export function removeTrack(room: SavedRoom, id: string): SavedRoom {
   const index = room.playlist.findIndex(t => t.id === id);

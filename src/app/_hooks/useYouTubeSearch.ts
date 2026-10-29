@@ -1,10 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { parseVideoId, type Track } from '../_lib/room';
-import { decodeYouTubeText } from '../_lib/youtube-text';
-export interface SearchTrack extends Track {
-  thumbnail?: string;
-}
+import { parseSearchResults, type SearchTrack } from '../_lib/search-results';
+export type { SearchTrack } from '../_lib/search-results';
 export function useYouTubeSearch() {
   const [draft, setDraft] = useState('');
   const [query, setQuery] = useState('');
@@ -36,41 +33,19 @@ export function useYouTubeSearch() {
         const response = await fetch('/api/youtube/search?' + params, {
           signal: request.signal,
         });
-        const data = await response.json();
+        const data: unknown = await response.json();
         if (!response.ok)
           throw new Error(
-            data.error || '검색에 실패했어요. 잠시 후 다시 시도해 주세요.',
+            data &&
+            typeof data === 'object' &&
+            'error' in data &&
+            typeof data.error === 'string'
+              ? data.error
+              : '검색에 실패했어요. 잠시 후 다시 시도해 주세요.',
           );
         if (id !== sequence.current) return;
-        const incoming: SearchTrack[] = (
-          Array.isArray(data.items) ? data.items : []
-        )
-          .filter(
-            (item: Record<string, unknown>) =>
-              typeof item.id === 'string' &&
-              parseVideoId(item.id) &&
-              typeof item.title === 'string',
-          )
-          .map(
-            (item: {
-              id: string;
-              title: string;
-              channelTitle?: string;
-              thumbnail?: string;
-            }) => {
-              return {
-                id: item.id,
-                title: decodeYouTubeText(item.title).slice(0, 500),
-                channel: typeof item.channelTitle === 'string'
-                  ? decodeYouTubeText(item.channelTitle).slice(0, 150) : undefined,
-                thumbnail:
-                  typeof item.thumbnail === 'string' &&
-                  item.thumbnail.startsWith('https://i.ytimg.com/')
-                    ? item.thumbnail
-                    : undefined,
-              };
-            },
-          );
+        const { items: incoming, pageToken: nextPageToken } =
+          parseSearchResults(data);
         setItems(prev =>
           more
             ? Array.from(
@@ -80,9 +55,7 @@ export function useYouTubeSearch() {
               )
             : incoming,
         );
-        setPageToken(
-          typeof data.nextPageToken === 'string' ? data.nextPageToken : null,
-        );
+        setPageToken(nextPageToken);
       } catch (cause) {
         if (request.signal.aborted || id !== sequence.current) return;
         setError(

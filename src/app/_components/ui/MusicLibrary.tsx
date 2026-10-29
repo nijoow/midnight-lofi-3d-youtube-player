@@ -1,6 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { RECOMMENDATIONS, parseVideoId, type Track } from '../../_lib/room';
+import {
+  MAX_PLAYLIST_TRACKS,
+  RECOMMENDATIONS,
+  parseVideoId,
+  type Track,
+} from '../../_lib/room';
 import { useYouTubeSearch } from '../../_hooks/useYouTubeSearch';
 import { Dialog } from './Dialog';
 import { Icon } from './Icon';
@@ -33,7 +38,7 @@ export function MusicLibrary({
         ? '내 재생목록에 담았어요.'
         : playlist.some(t => t.id === track.id)
           ? '이미 담겨 있는 음악이에요.'
-          : '재생목록에는 최대 200개까지 담을 수 있어요.',
+          : `재생목록에는 최대 ${MAX_PLAYLIST_TRACKS}개까지 담을 수 있어요.`,
     );
   const tracks =
     tab === 'discover'

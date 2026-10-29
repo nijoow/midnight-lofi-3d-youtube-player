@@ -1,7 +1,9 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import {
+  BREAK_SECONDS,
   initialTimer,
+  restoreTimer,
   reconcileTimer,
   timerSeconds,
   type TimerMode,
@@ -17,21 +19,8 @@ export function useFocusTimer() {
     const time = Date.now();
     setNow(time);
     try {
-      const saved = JSON.parse(sessionStorage.getItem(KEY) || 'null');
-      if (
-        saved &&
-        [0, 25, 50].includes(saved.mode) &&
-        ['focus', 'break'].includes(saved.phase) &&
-        typeof saved.running === 'boolean' &&
-        Number.isFinite(saved.seconds) &&
-        saved.seconds >= 0 &&
-        saved.seconds <= 86400 &&
-        Number.isInteger(saved.completed) &&
-        saved.completed >= 0 &&
-        (saved.anchor === null ||
-          (Number.isFinite(saved.anchor) && saved.anchor <= time)) &&
-        (!saved.running || saved.anchor !== null)
-      ) {
+      const saved = restoreTimer(sessionStorage.getItem(KEY), time);
+      if (saved) {
         const result = reconcileTimer(saved, time);
         setTimer(result.timer);
         if (result.finished)
@@ -101,7 +90,7 @@ export function useFocusTimer() {
       ...prev,
       running: false,
       anchor: null,
-      seconds: prev.phase === 'break' ? 300 : prev.mode * 60,
+      seconds: prev.phase === 'break' ? BREAK_SECONDS : prev.mode * 60,
     }));
     setNotice('');
   }, []);

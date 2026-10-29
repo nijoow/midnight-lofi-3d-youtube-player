@@ -51,3 +51,18 @@ test('a finished break returns to the chosen focus duration without starting aut
   assert.equal(result.timer.completed, 2);
   assert.equal(result.timer.running, false);
 });
+
+test('restores valid paused/running session data and rejects invalid timing state', async () => {
+  const { restoreTimer, BREAK_SECONDS } = await import('../../src/app/_lib/timer');
+  const now = 10000;
+  for (const timer of [initialTimer, { ...initialTimer, running: true, anchor: 1000 }, { ...initialTimer, mode: 0, seconds: 50 }, { ...initialTimer, phase: 'break', seconds: BREAK_SECONDS }]) {
+    assert.deepEqual(restoreTimer(JSON.stringify(timer), now), timer);
+  }
+  for (const raw of [null, '{bad', 'null', '[]', '{}', ...[
+    { mode: 20 }, { phase: 'other' }, { seconds: -1 }, { seconds: 86401 },
+    { completed: 0.5 }, { anchor: now + 1 }, { running: true, anchor: null },
+    { seconds: '1500' }, { anchor: '1000' },
+  ].map(patch => JSON.stringify({ ...initialTimer, ...patch }))]) {
+    assert.equal(restoreTimer(raw, now), null, String(raw));
+  }
+});
