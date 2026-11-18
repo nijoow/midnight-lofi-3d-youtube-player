@@ -29,20 +29,6 @@ node .yarn/releases/yarn-4.3.1.cjs dev
 - `.env.local`의 `YOUTUBE_API_KEY`에는 YouTube Data API v3가 활성화된 키를 입력합니다.
 - API 키는 서버 검색 라우트에서만 사용하며, 키 없이도 추천 음악, 영상 링크 추가, 집중 타이머는 동작합니다.
 
-## 테스트와 빌드
-
-```sh
-node .yarn/releases/yarn-4.3.1.cjs lint
-node .yarn/releases/yarn-4.3.1.cjs test
-node .yarn/releases/yarn-4.3.1.cjs build
-node .yarn/releases/yarn-4.3.1.cjs typecheck
-
-node .yarn/releases/yarn-4.3.1.cjs playwright install chromium
-node .yarn/releases/yarn-4.3.1.cjs test:e2e
-```
-
-브라우저 테스트는 기본 포트 3122의 독립 개발 서버를 사용하며(`PORT`로 변경 가능), 기존 Chromium을 사용하려면 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`를 지정하면 됩니다.
-
 ## 구조와 렌더링
 
 - `src/app/page.tsx`: 메인 화면 및 기능 연결
