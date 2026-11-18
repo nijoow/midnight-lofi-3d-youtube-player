@@ -1,27 +1,81 @@
-# 📺 Midnight Lofi 3D Youtube Player
+# Midnight Lofi
 
-YouTube 플레이리스트 감상을 위한 몰입형 3D 환경 토이 프로젝트.
+빈티지 TV 앞에서 좋아하는 음악을 듣고, 당신의 속도로 쉬거나 집중하는 작은 거실.
+원래의 TV 모델과 어두운 거실을 중심으로 투명한 글래스 UI, 음악 관리, 집중·취침 타이머를 연결했습니다.
 
----
+## 경험
 
-## 🛠️ 주요 기능
+- **원래의 TV와 공간**: 기존 `vintage-television.glb`의 모델·텍스처와 거실 가구를 사용합니다. 화면을 가리지 않도록 소파 위치와 카메라 범위를 조정했습니다.
+- **글래스 UI**: TV를 중심에 둔 전체 화면, 반투명 재생 바와 패널. 집중 타이머는 상단 시계 버튼으로 열고 접습니다.
+- **세 가지 분위기**: 비 오는 새벽, 조용한 밤, 노을 지는 방. 창밖과 TV 대기 화면, 조명 색감이 달라집니다.
+- **TV 안의 영상**: 대기 화면을 누르면 음악이 시작됩니다. 실제 YouTube 영상이 TV 화면에 맞춰 표시되며, 스탠드와 하단 조명 버튼으로 거실 불빛을 바꿉니다.
+- **카메라**: 기본·거실·TV 정면 시점, 제한된 범위의 드래그 회전. 선택한 시점을 다시 누르면 카메라가 원위치로 돌아갑니다.
+- **음악**: 추천 음악, YouTube 검색과 더 보기, 영상 링크 추가, 목록 순서 변경·삭제, 이전/다음 곡, 볼륨·음소거, 전체/한 곡 반복.
+- **집중**: 25분·50분·자유 모드, 일시정지, 5분 휴식 안내. 집중 중에는 거실 조명이 켜집니다. 패널을 접어도 타이머는 계속 동작합니다.
+- **취침 예약**: 30분·60분·90분 뒤 음악 정지.
+- **다시 방문하기**: 목록·선택한 음악·볼륨·분위기·카메라·품질 설정을 브라우저에 저장합니다. 재방문 시 음악은 자동 재생하지 않습니다.
+- **가벼운 보기**: 절전 모드, 움직임 줄이기, CSS 기반 2D TV 보기. WebGL 장애는 3D 영역에서 격리하고 음악과 타이머는 유지합니다.
+- **모바일·키보드**: 모바일 하단 패널, 독립적인 목록/검색 탭, 네이티브 대화상자의 포커스 관리·Esc 닫기, 스페이스 재생/정지.
 
-### 🌌 몰입형 3D 환경
+## 실행
 
-- **TV 화면 속 영상**: TV 화면 내에 Youtube Player를 맵핑하여 실감나게 구현.
-- **인터랙티브 카메라**: Orbit Controls을 통해 원하는 각도에서 공간을 탐색하고 감상 가능.
+Node.js 22 이상과 Yarn 4.3.1을 사용합니다. 저장소에 Yarn 실행 파일이 포함되어 있습니다.
 
-### 🎥 YouTube Player 기능
+```sh
+node .yarn/releases/yarn-4.3.1.cjs install --immutable
+cp .env.example .env.local
+node .yarn/releases/yarn-4.3.1.cjs dev
+```
 
-- **커스텀 플레이리스트**: 나만의 영상 플레이리스트를 만들어 연속 영상 시청 가능.
-- **실시간 검색**: YouTube API 연동을 통해 영상을 검색 해서 플레이리스트에 추가 가능.
-- **직관적인 UI**: 하단 제어 컨트롤러 패널을 통해 재생, 볼륨 조절, 플레이리스트 관리.
+`.env.local`에 YouTube Data API v3가 활성화된 프로젝트의 `YOUTUBE_API_KEY`를 입력하세요.
+키는 서버 검색 라우트에서만 사용합니다. 키가 없어도 추천 음악·영상 링크 추가·집중 타이머는 사용할 수 있습니다.
+영상 재생에는 사용자의 브라우저에서 YouTube IFrame API와 영상 호스트에 접근할 수 있어야 합니다.
+프록시가 필요한 실행 환경에서는 해당 환경이 제공하는 프록시·인증 설정을 사용하세요.
 
-## 🚀 기술 스택
+## 검증
 
-- **Core**: [Next.js 14](https://nextjs.org/) (App Router)
-- **3D Engine**: [Three.js](https://threejs.org/) with [React Three Fiber](https://r3f.docs.pmnd.rs/getting-started/introduction)
-- **3D Utilities**: [@react-three/drei](https://github.com/pmndrs/drei)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Integration**: [react-youtube](https://github.com/tjallingt/react-youtube)
+```sh
+node .yarn/releases/yarn-4.3.1.cjs lint
+node .yarn/releases/yarn-4.3.1.cjs test
+node .yarn/releases/yarn-4.3.1.cjs build
+node .yarn/releases/yarn-4.3.1.cjs typecheck
+
+# 최초 1회 테스트용 브라우저 설치
+node .yarn/releases/yarn-4.3.1.cjs playwright install chromium
+node .yarn/releases/yarn-4.3.1.cjs test:e2e
+```
+
+이미 설치된 Chromium을 사용한다면 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`에 실행 파일 경로를 지정합니다.
+브라우저 테스트는 기본 3122번 포트(`PORT`로 변경 가능)에 독립 개발 서버를 실행하며, 기존 서버를 재사용하지 않습니다.
+빌드와 타입 검사는 같은 `.next` 디렉터리를 사용하므로 동시에 실행하지 마세요.
+
+- 단위 테스트: 링크 파싱, 저장 데이터 복원, 목록 경계, 반복 재생, 타이머 경과 시간, 검색 검증·캐시·동시 요청 병합·요청 제한·할당량 오류, 카메라/화면 크기별 TV 화면 투영.
+- 브라우저 테스트: 원본 GLB 모델 로드, 카메라·3D/2D·WebGL 장애 전환 시 같은 재생 프레임 유지, 설정 복원, 재생 상태, 빈 목록, 검색 응답 순서, 모바일 긴 목록, 모달 포커스, 타이머·취침 예약.
+- 재생 및 검색 회귀 테스트는 제어 가능한 YouTube 응답/플레이어 대역을 사용합니다. 실제 영상의 임베드 허용 여부, 브라우저 자동재생 정책, API 키 권한은 연결된 환경에서 별도로 확인해야 합니다.
+
+## 구조
+
+```text
+src/app/
+  page.tsx                    화면과 기능 연결
+  _components/three/          원본 TV 모델·거실, 카메라와 2D 대체 화면
+  _components/ui/             음악 패널, 플레이어, 집중 타이머, 설정
+  _components/video/          지연 로딩하는 YouTube 임베드
+  _hooks/                     재생, 검색, 저장, 집중/취침 타이머
+  _lib/                       데이터 검증, 목록·시간 계산, 검색 서버 로직
+  api/youtube/search/route.ts  서버 전용 YouTube 검색 진입점
+```
+
+TV는 저장소의 `public/3D/vintage-television.glb`를 사용하며 외부 HDR·폰트 다운로드는 필요하지 않습니다.
+`PlayerScreen`은 WebGL 밖에서 한 번 마운트하고, `screen-projection.ts`에서 계산한 CSS 행렬로 TV 면에 맞춥니다. 카메라를 돌리거나 2D로 전환해도 iframe을 재생성하지 않으므로 재생 상태를 유지합니다.
+React 19, Fiber 9, Drei 10, Three.js의 호환 버전을 함께 사용합니다.
+균형 모드는 하나의 그림자 광원과 제한된 해상도를 사용하며, 절전 모드는 실시간 그림자와 지속 애니메이션을 끕니다.
+움직임이 없거나 탭이 숨겨지면 필요할 때만 3D를 다시 그립니다.
+
+## 저장과 운영 범위
+
+- `localStorage`의 `midnight-room:v1`: 버전이 있는 방 설정과 최대 200개 영상 목록. 잘못된 저장 값은 검증·정리하고 저장소 사용이 불가능해도 현재 방문은 계속 동작합니다.
+- `sessionStorage`: 현재 탭의 집중 타이머와 취침 예약. 실제 경과 시간으로 계산하므로 백그라운드에서 돌아오거나 새로고침해도 시간을 다시 맞춥니다. 탭이 닫히면 알림이나 음악 정지는 실행되지 않습니다.
+- YouTube API: 검색어·페이지 토큰 검증, 임베드 가능 영상 필터, 8초 타임아웃, 5분 캐시(최대 100개), 동일 요청 병합, 서버 인스턴스당 분당 20회 신규 검색 제한.
+- 검색 캐시와 요청 제한은 **프로세스 메모리 기준**입니다. 다중 인스턴스나 서버리스 공개 배포에서는 공용 저장소/게이트웨이의 요청 제한과 일일 API 할당량 모니터링을 추가해야 합니다.
+- 타이머와 취침 예약은 브라우저가 실행 중인 동안 동작합니다. 기기 절전 등으로 실행이 중단되면 탭으로 돌아왔을 때 종료 시점을 확인합니다.

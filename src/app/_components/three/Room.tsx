@@ -1,5 +1,4 @@
 import React from 'react';
-import * as THREE from 'three';
 
 const Room = () => {
   const wallColor = '#1a1008'; // 매우 어두운 색상

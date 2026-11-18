@@ -1,10 +1,10 @@
-import React from 'react';
+import { memo } from 'react';
 
 // 레트로 카페/거실 컨셉의 세련된 가구
 // ─────────────────────────────────────────────────────
 
 /** TV 받침대 (TV 크기에 맞춘 와이드 사이드보드) */
-const TVStand = ({
+export const TVStand = ({
   position,
 }: {
   position: [number, number, number];
@@ -14,7 +14,11 @@ const TVStand = ({
       {/* 메인 본체 (X: Depth, Y: Height, Z: Width) */}
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[0.6, 0.35, 1.8]} />
-        <meshStandardMaterial color="#1c120a" roughness={0.4} metalness={0.15} />
+        <meshStandardMaterial
+          color="#1c120a"
+          roughness={0.4}
+          metalness={0.15}
+        />
       </mesh>
       {/* 상판 */}
       <mesh position={[0, 0.185, 0]} castShadow receiveShadow>
@@ -22,7 +26,11 @@ const TVStand = ({
         <meshStandardMaterial color="#2a1c0e" roughness={0.3} metalness={0.2} />
       </mesh>
       {/* 서랍 손잡이 x2 (앞면은 +X 방향이므로 X=0.32 위치) */}
-      <mesh position={[0.32, 0, -0.4]} rotation={[0, 0, Math.PI / 2]} castShadow>
+      <mesh
+        position={[0.32, 0, -0.4]}
+        rotation={[0, 0, Math.PI / 2]}
+        castShadow
+      >
         <cylinderGeometry args={[0.015, 0.015, 0.18, 8]} />
         <meshStandardMaterial color="#b8860b" roughness={0.2} metalness={0.9} />
       </mesh>
@@ -41,7 +49,11 @@ const TVStand = ({
       ).map(([x, z], i) => (
         <mesh key={i} position={[x, -0.22, z]} castShadow>
           <cylinderGeometry args={[0.02, 0.018, 0.22, 8]} />
-          <meshStandardMaterial color="#b8860b" roughness={0.2} metalness={0.9} />
+          <meshStandardMaterial
+            color="#b8860b"
+            roughness={0.2}
+            metalness={0.9}
+          />
         </mesh>
       ))}
     </group>
@@ -98,7 +110,11 @@ const Sofa = ({
       ).map(([x, z], i) => (
         <mesh key={i} position={[x, -0.15, z]} castShadow>
           <cylinderGeometry args={[0.03, 0.02, 0.2, 8]} />
-          <meshStandardMaterial color="#1a0e06" roughness={0.6} metalness={0.1} />
+          <meshStandardMaterial
+            color="#1a0e06"
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
       ))}
     </group>
@@ -113,7 +129,7 @@ const SideTable = ({ position }: { position: [number, number, number] }) => {
         <cylinderGeometry args={[0.25, 0.25, 0.04, 24]} />
         <meshStandardMaterial color="#2a1c0e" roughness={0.4} metalness={0.1} />
       </mesh>
-      {[0, 1, 2].map((i) => {
+      {[0, 1, 2].map(i => {
         const angle = (i / 3) * Math.PI * 2;
         return (
           <mesh
@@ -123,7 +139,11 @@ const SideTable = ({ position }: { position: [number, number, number] }) => {
             castShadow
           >
             <cylinderGeometry args={[0.015, 0.01, 0.44, 8]} />
-            <meshStandardMaterial color="#b8860b" roughness={0.2} metalness={0.9} />
+            <meshStandardMaterial
+              color="#b8860b"
+              roughness={0.2}
+              metalness={0.9}
+            />
           </mesh>
         );
       })}
@@ -132,9 +152,23 @@ const SideTable = ({ position }: { position: [number, number, number] }) => {
 };
 
 /** 스탠드 램프 */
-const FloorLamp = ({ position }: { position: [number, number, number] }) => {
+const FloorLamp = ({
+  position,
+  lampOn,
+  onLamp,
+}: {
+  position: [number, number, number];
+  lampOn: boolean;
+  onLamp: () => void;
+}) => {
   return (
-    <group position={position}>
+    <group
+      position={position}
+      onClick={event => {
+        event.stopPropagation();
+        onLamp();
+      }}
+    >
       <mesh position={[0, 0, 0]} castShadow>
         <cylinderGeometry args={[0.15, 0.18, 0.06, 20]} />
         <meshStandardMaterial color="#1a1208" roughness={0.5} metalness={0.3} />
@@ -145,7 +179,14 @@ const FloorLamp = ({ position }: { position: [number, number, number] }) => {
       </mesh>
       <mesh position={[0, 2.0, 0]} castShadow>
         <coneGeometry args={[0.25, 0.35, 20, 1, true]} />
-        <meshStandardMaterial color="#d4a04a" roughness={0.6} metalness={0.1} side={2} />
+        <meshStandardMaterial
+          color="#d4a04a"
+          emissive="#ffbf70"
+          emissiveIntensity={lampOn ? 0.6 : 0}
+          roughness={0.6}
+          metalness={0.1}
+          side={2}
+        />
       </mesh>
       <mesh position={[0, 2.18, 0]}>
         <cylinderGeometry args={[0.04, 0.04, 0.03, 12]} />
@@ -167,7 +208,11 @@ const VintagePlant = ({
     <group position={position} scale={scale}>
       <mesh position={[0, 0.175, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[0.16, 0.12, 0.35, 16]} />
-        <meshStandardMaterial color="#7a3b1e" roughness={0.8} metalness={0.05} />
+        <meshStandardMaterial
+          color="#7a3b1e"
+          roughness={0.8}
+          metalness={0.05}
+        />
       </mesh>
       <mesh position={[0, 0.355, 0]}>
         <torusGeometry args={[0.165, 0.018, 8, 20]} />
@@ -181,7 +226,7 @@ const VintagePlant = ({
         <cylinderGeometry args={[0.02, 0.025, 0.6, 8]} />
         <meshStandardMaterial color="#2d5a1e" roughness={0.9} />
       </mesh>
-      {[0, 1, 2, 3, 4, 5, 6].map((i) => {
+      {[0, 1, 2, 3, 4, 5, 6].map(i => {
         const angle = (i / 7) * Math.PI * 2;
         const h = 0.575 + i * 0.08;
         return (
@@ -214,9 +259,18 @@ const Bookshelf = ({
   rotation?: [number, number, number];
 }) => {
   const bookColors = [
-    '#8b0000', '#00008b', '#006400', '#8b4513',
-    '#4b0082', '#b8860b', '#2f4f4f', '#800000',
-    '#556b2f', '#8b008b', '#483d8b', '#b22222',
+    '#8b0000',
+    '#00008b',
+    '#006400',
+    '#8b4513',
+    '#4b0082',
+    '#b8860b',
+    '#2f4f4f',
+    '#800000',
+    '#556b2f',
+    '#8b008b',
+    '#483d8b',
+    '#b22222',
   ];
 
   return (
@@ -224,7 +278,11 @@ const Bookshelf = ({
       {/* 프레임 */}
       <mesh castShadow receiveShadow>
         <boxGeometry args={[0.8, 1.8, 0.3]} />
-        <meshStandardMaterial color="#1c120a" roughness={0.6} metalness={0.05} />
+        <meshStandardMaterial
+          color="#1c120a"
+          roughness={0.6}
+          metalness={0.05}
+        />
       </mesh>
       {/* 선반판 4개 */}
       {[0.25, 0.75, -0.25, -0.75].map((y, i) => (
@@ -239,9 +297,14 @@ const Bookshelf = ({
         const col = i % 4;
         const x = -0.3 + col * 0.15;
         const y = -0.85 + row * 0.5 + 0.12;
-        const tilt = (Math.random() - 0.5) * 0.2;
+        const tilt = Math.sin(i * 3.7) * 0.1;
         return (
-          <mesh key={i} position={[x, y, 0.08]} rotation={[0, 0, tilt]} castShadow>
+          <mesh
+            key={i}
+            position={[x, y, 0.08]}
+            rotation={[0, 0, tilt]}
+            castShadow
+          >
             <boxGeometry args={[0.06, 0.24, 0.2]} />
             <meshStandardMaterial color={color} roughness={0.7} />
           </mesh>
@@ -271,19 +334,33 @@ const Mug = ({ position }: { position: [number, number, number] }) => {
   );
 };
 
-export const Furniture = () => {
+export const Furniture = memo(function Furniture({
+  lampOn,
+  onLamp,
+}: {
+  lampOn: boolean;
+  onLamp: () => void;
+}) {
   return (
     <group>
-      {/* 소파 - TV 맞은편 (TV는 +X를 보므로 소파는 -X를 마주보게) */}
-      <Sofa position={[2.2, -0.82, 0]} rotation={[0, -Math.PI / 2, 0]} />
+      {/* 원래 소파를 유지하되 낮은 시점에서 TV를 가리지 않도록 옆으로 배치 */}
+      <Sofa position={[2.2, -0.82, -2.4]} rotation={[0, -Math.PI / 2, 0]} />
 
       {/* 소파 사이드 테이블 (소파 우측) */}
       <SideTable position={[2.2, -0.58, -1.4]} />
       <Mug position={[2.2, -0.52, -1.4]} />
 
       {/* 스탠드 램프 - 방 양쪽 모서리 부근 */}
-      <FloorLamp position={[-0.8, -1.02, -2.5]} />
-      <FloorLamp position={[-0.8, -1.02, 2.5]} />
+      <FloorLamp
+        lampOn={lampOn}
+        onLamp={onLamp}
+        position={[-0.8, -1.02, -2.5]}
+      />
+      <FloorLamp
+        lampOn={lampOn}
+        onLamp={onLamp}
+        position={[-0.8, -1.02, 2.5]}
+      />
 
       {/* 화분들 - 모서리나 여백 채우기 */}
       <VintagePlant position={[2.0, -1.02, 2.5]} scale={1.3} />
@@ -293,4 +370,4 @@ export const Furniture = () => {
       <Bookshelf position={[0.8, -0.12, -3.2]} rotation={[0, 0, 0]} />
     </group>
   );
-};
+});
