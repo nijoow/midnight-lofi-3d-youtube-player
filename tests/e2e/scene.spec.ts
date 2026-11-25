@@ -6,7 +6,8 @@ test('renders an offline 3D room and preserves controls after a lost WebGL conte
   const external: string[] = [];
   page.on('request', request => {
     if (
-      new URL(request.url()).origin !== `http://127.0.0.1:${process.env.PORT || 3122}` &&
+      new URL(request.url()).origin !==
+        `http://127.0.0.1:${process.env.PORT || 3122}` &&
       !request.url().startsWith('data:')
     )
       external.push(request.url());
@@ -28,6 +29,7 @@ test('renders an offline 3D room and preserves controls after a lost WebGL conte
     'true',
     { timeout: 20000 },
   );
+  await page.getByRole('button', { name: '방 설정', exact: true }).click();
   await page.getByRole('button', { name: '노을 지는 방', exact: true }).click();
   await expect(page.locator('.midnight-app')).toHaveAttribute(
     'data-mood',
@@ -37,6 +39,7 @@ test('renders an offline 3D room and preserves controls after a lost WebGL conte
   await expect(
     page.getByRole('button', { name: '거실', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
+  await page.keyboard.press('Escape');
   await page
     .locator('canvas')
     .evaluate(canvas =>

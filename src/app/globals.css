@@ -1580,3 +1580,52 @@ input::placeholder {
     backdrop-filter: none;
   }
 }
+
+/* The room is the visual identity. Controls stay at the edge like a player. */
+:root { --cream: #f1f3f4; --muted: #b6bdc4; --line: #ffffff26; }
+.app-header { inset: 24px 28px auto; align-items: flex-start; }
+.wordmark { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 20px; font-weight: 600; letter-spacing: -.7px; gap: 0; }
+.wordmark > svg { display: none; }
+.wordmark em { font-style: normal; color: inherit; }
+.room-caption { position: absolute; top: 32px; left: 0; font-size: 12px; color: #d6dadb; text-shadow: 0 1px 6px #000; }
+.header-actions { padding: 0; gap: 8px; border: 0; }
+.header-actions .icon-button { min-height: 40px; min-width: 40px; padding: 0 12px; border-radius: 20px; background: #14181bc9; gap: 8px; color: #f1f3f4; }
+.action-label { font-size: 12px; }
+.player-dock { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); left: 0; bottom: 0; transform: none; width: 100%; max-width: none; height: 100px; padding: 18px 32px; gap: 28px; border-radius: 0; border: 0; background: #171c21; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.player-main { display: contents; }
+.track-readout { flex: 1; min-width: 0; }
+.now-playing-label { color: #a4b0ba; }
+.player-main h2 { margin: 8px 0 0; font-size: 14px; font-weight: 500; }
+.playback-controls { gap: 12px; flex-shrink: 0; }
+.play-button { width: 44px; height: 44px; border: 0; background: #f2f5f6; color: #1c242b; box-shadow: none; }
+.play-button:hover { background: white; }
+.player-options { justify-self: end; width: 250px; flex-direction: row; align-items: center; gap: 24px; padding-left: 22px; border-left: 1px solid #ffffff25; }
+.library-button { padding: 0; border: 0; background: none; font-size: 12px; gap: 8px; white-space: nowrap; }
+.library-button > svg:last-child { display: none; }
+.volume-control { width: 105px; gap: 6px; }
+.volume-control input { min-width: 0; accent-color: #cbd8e0; }
+.volume-control > span { display: none; }
+.keyboard-hint { display: none; }
+.app-footer { bottom: 115px; left: 28px; right: 28px; color: #d2d8db; }
+.side-dialog { border-radius: 12px; background: #20282f; border: 1px solid #69778155; box-shadow: 0 18px 60px #0008; backdrop-filter: none; }
+.dialog-header h2 { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 24px; letter-spacing: -.6px; }
+.focus-widget { border-radius: 12px; background: #20282ff5; }
+.primary-button { background: #e1e9ee; border-color: #e1e9ee; color: #1d2a33; }
+.primary-button:hover { background: white; }
+.scene-bottom { bottom: 130px; }
+@media (max-width: 700px) {
+ .app-header { inset: 20px 20px auto; }
+ .wordmark { font-size: 19px; }
+ .room-caption { top: 28px; font-size: 11px; }
+ .action-label { display: none; }
+ .player-dock { height: auto; padding: 16px 20px 20px; display: grid; grid-template-columns: 1fr auto; gap: 12px; }
+ .track-readout { grid-column: 1/-1; }
+ .player-main h2 { margin: 6px 0 0; font-size: 13px; }
+ .playback-controls { gap: 5px; grid-column: 1; justify-content: flex-start; }
+ .player-options { grid-column: 2; padding: 0; border: 0; width: auto; }
+ .volume-control { display: none; }
+ .library-button { min-height: 44px; }
+ .app-footer { bottom: 155px; left: 20px; right: 20px; }
+ .side-dialog { inset: 10px; width: calc(100% - 20px); max-height: calc(100dvh - 20px); }
+ .flat-television, .midnight-app[data-view='2d'] .tv-screen { top: 42%; }
+}

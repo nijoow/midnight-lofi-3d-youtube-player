@@ -43,21 +43,23 @@ export function PlayerDock({
   return (
     <section className="player-dock" aria-label="음악 플레이어">
       <div className="player-main">
-        <div className="now-playing-label">
-          <span
-            className={'equalizer' + (playing ? ' playing' : '')}
-            aria-hidden="true"
-          >
-            <i />
-            <i />
-            <i />
-            <i />
-          </span>
-          <span className="eyebrow">
-            {track ? labels[player.status] : '선택한 음악 없음'}
-          </span>
+        <div className="track-readout">
+          <div className="now-playing-label">
+            <span
+              className={'equalizer' + (playing ? ' playing' : '')}
+              aria-hidden="true"
+            >
+              <i />
+              <i />
+              <i />
+              <i />
+            </span>
+            <span className="eyebrow">
+              {track ? labels[player.status] : '선택한 음악 없음'}
+            </span>
+          </div>
+          <h2 title={track?.title}>{track?.title || '음악을 선택해 주세요'}</h2>
         </div>
-        <h2 title={track?.title}>{track?.title || '음악을 선택해 주세요'}</h2>
         <div className="playback-controls">
           <button
             className="icon-button"
