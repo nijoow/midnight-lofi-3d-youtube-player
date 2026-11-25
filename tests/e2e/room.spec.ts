@@ -107,7 +107,9 @@ test('saves mood, volume and view without autoplay, and restores them after refr
 }) => {
   await seed(page);
   await page.goto('/');
+  await page.getByRole('button', { name: '방 설정', exact: true }).click();
   await page.getByRole('button', { name: '노을 지는 방', exact: true }).click();
+  await page.keyboard.press('Escape');
   await page.getByRole('slider', { name: '음악 볼륨' }).fill('65');
   await expect(page.locator('.midnight-app')).toHaveAttribute(
     'data-mood',
@@ -388,18 +390,20 @@ test('the original CRT keeps the same playing iframe through camera and 2D fallb
   const originalTransform = await screen.evaluate(
     element => element.style.transform,
   );
+  await page.getByRole('button', { name: '방 설정', exact: true }).click();
   await page.getByRole('button', { name: 'TV 정면', exact: true }).click();
   await expect
     .poll(() => screen.evaluate(element => element.style.transform))
     .not.toBe(originalTransform);
   await page
-    .getByRole('button', { name: '2D 보기로 전환', exact: true })
+    .getByRole('button', { name: '2D 보기', exact: true })
     .click();
   await expect(page.getByRole('img', { name: /빈티지 TV/ })).toBeVisible();
   await page
-    .getByRole('button', { name: '3D 보기로 전환', exact: true })
+    .getByRole('button', { name: '3D 보기', exact: true })
     .click();
   await expect(screen).toHaveAttribute('data-projected', 'true');
+  await page.keyboard.press('Escape');
   await page
     .locator('canvas')
     .evaluate(canvas =>
@@ -512,4 +516,24 @@ test('canceling and replacing a sleep deadline leaves music playing until the ne
   await expect(page.getByText('재생 중', { exact: true })).toBeVisible();
   await page.clock.fastForward(30 * 60000);
   await expect(page.getByText('일시정지', { exact: true })).toBeVisible();
+});
+
+
+test('compact listening console keeps mobile controls visible and room tools return focus after dismissal', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await seed(page);
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: '음악 재생', exact: true })).toBeInViewport();
+  await expect(page.getByRole('button', { name: '음악 고르기', exact: true })).toBeInViewport();
+  await expect(page.getByRole('button', { name: '노을 지는 방', exact: true })).toHaveCount(0);
+  for (let i = 0; i < 2; i++) {
+    await page.getByRole('button', { name: '방 설정', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'TV 정면', exact: true })).toBeDisabled();
+    await page.getByRole('button', { name: '노을 지는 방', exact: true }).click();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: '방 설정', exact: true })).toBeFocused();
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  const dock = await page.locator('.player-dock').boundingBox();
+  expect(dock!.y + dock!.height).toBeLessThanOrEqual(844);
 });

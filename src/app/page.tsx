@@ -7,19 +7,14 @@ import { PlayerScreen } from './_components/ui/PlayerScreen';
 import { PlayerDock } from './_components/ui/PlayerDock';
 import { MusicLibrary } from './_components/ui/MusicLibrary';
 import { RoomSettings } from './_components/ui/RoomSettings';
-import { Icon, type IconName } from './_components/ui/Icon';
+import { Icon } from './_components/ui/Icon';
 import { Dialog } from './_components/ui/Dialog';
 import { useRoomState } from './_hooks/useRoomState';
 import { useFocusTimer } from './_hooks/useFocusTimer';
 import { usePlaylistPlayback } from './_hooks/usePlaylistPlayback';
 import { useSleepTimer } from './_hooks/useSleepTimer';
-import { MOODS, formatTime, type CameraView, type Mood } from './_lib/room';
+import { MOODS, formatTime } from './_lib/room';
 
-const MOOD_ICONS: Record<Mood, IconName> = {
-  rain: 'rain',
-  night: 'moon',
-  sunset: 'sun',
-};
 export default function Home() {
   const {
     room,
@@ -104,19 +99,11 @@ export default function Home() {
             midnight <em>lofi</em>
           </span>
         </Link>
-        <nav className="mood-switcher glass" aria-label="방 분위기">
-          {(Object.keys(MOODS) as Mood[]).map(key => (
-            <button
-              key={key}
-              aria-pressed={preferences.mood === key}
-              onClick={() => updatePreferences({ mood: key })}
-            >
-              <Icon name={MOOD_ICONS[key]} size={16} />
-              <span>{MOODS[key].label}</span>
-            </button>
-          ))}
-        </nav>
-        <div className="header-actions glass">
+        <div className="room-caption">
+
+          {MOODS[preferences.mood].label}
+        </div>
+        <div className="header-actions">
           <button
             className={'icon-button' + (focusOpen ? ' selected' : '')}
             aria-label="집중 타이머"
@@ -137,7 +124,8 @@ export default function Home() {
             aria-label="방 설정"
             onClick={() => setPanel('settings')}
           >
-            <Icon name="settings" size={19} />
+            <Icon name="settings" size={17} />
+            <span className="action-label">공간</span>
           </button>
         </div>
       </header>
@@ -175,11 +163,7 @@ export default function Home() {
         />
         <div className="room-vignette" aria-hidden="true" />
       </section>
-      <aside
-        id="focus-panel"
-        className="focus-widget glass"
-        hidden={!focusOpen}
-      >
+      <aside id="focus-panel" className="focus-widget" hidden={!focusOpen}>
         <div className="focus-widget-heading">
           <span>집중 타이머</span>
           <button
@@ -195,59 +179,6 @@ export default function Home() {
         </div>
         <FocusPanel focus={focus} />
       </aside>
-      <div className="scene-bottom">
-        <div
-          className="camera-switcher glass"
-          role="group"
-          aria-label="카메라 시점"
-        >
-          {(
-            [
-              { id: 'room', label: '기본 시점' },
-              { id: 'desk', label: '거실' },
-              { id: 'tv', label: 'TV 정면' },
-            ] as { id: CameraView; label: string }[]
-          ).map(view => (
-            <button
-              key={view.id}
-              disabled={preferences.mode === '2d'}
-              aria-pressed={preferences.camera === view.id}
-              onClick={() => {
-                updatePreferences({ camera: view.id });
-                setCameraRevision(value => value + 1);
-              }}
-            >
-              {view.label}
-            </button>
-          ))}
-        </div>
-        <div className="scene-tools glass">
-          <button
-            className={
-              'icon-button' +
-              (preferences.lampOn || focus.focusing ? ' selected' : '')
-            }
-            aria-label="거실 조명 전환"
-            aria-pressed={preferences.lampOn || focus.focusing}
-            onClick={toggleLamp}
-          >
-            <Icon name="lamp" size={17} />
-          </button>
-          <button
-            className="icon-button mode-button"
-            aria-label={
-              preferences.mode === '3d' ? '2D 보기로 전환' : '3D 보기로 전환'
-            }
-            onClick={() =>
-              updatePreferences({
-                mode: preferences.mode === '3d' ? '2d' : '3d',
-              })
-            }
-          >
-            {preferences.mode === '3d' ? '2D' : '3D'}
-          </button>
-        </div>
-      </div>
       <PlayerDock
         track={currentTrack}
         player={player}
@@ -275,7 +206,11 @@ export default function Home() {
         onLibrary={openMusic}
       />
       <footer className="app-footer">
-        <span>드래그로 시점 이동</span>
+        <span>
+          {preferences.mode === '3d'
+            ? '드래그로 방 둘러보기'
+            : '가벼운 2D 감상실'}
+        </span>
         {(storageUnavailable || sleep.deadline) && (
           <span>
             {storageUnavailable ? '설정을 저장할 수 없어요' : ''}
@@ -303,6 +238,10 @@ export default function Home() {
         preferences={preferences}
         onChange={updatePreferences}
         sleep={sleep}
+        onCamera={camera => {
+          updatePreferences({ camera });
+          setCameraRevision(value => value + 1);
+        }}
       />
       <Dialog
         open={panel === 'help'}

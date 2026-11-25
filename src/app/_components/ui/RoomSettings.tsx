@@ -1,4 +1,9 @@
-import type { Preferences } from '../../_lib/room';
+import {
+  MOODS,
+  type Mood,
+  type CameraView,
+  type Preferences,
+} from '../../_lib/room';
 import type { useSleepTimer } from '../../_hooks/useSleepTimer';
 import { Dialog } from './Dialog';
 import { Icon } from './Icon';
@@ -8,16 +13,63 @@ export function RoomSettings({
   preferences,
   onChange,
   sleep,
+  onCamera,
 }: {
   open: boolean;
   onClose: () => void;
   preferences: Preferences;
   onChange: (patch: Partial<Preferences>) => void;
   sleep: ReturnType<typeof useSleepTimer>;
+  onCamera: (camera: CameraView) => void;
 }) {
   return (
     <Dialog open={open} onClose={onClose} title="설정">
       <div className="settings-body">
+        <div className="setting-section">
+          <h3>창밖의 시간</h3>
+          <p>오늘의 방에 어울리는 빛과 풍경을 골라요.</p>
+          <div className="segmented-control" aria-label="방 분위기">
+            {(Object.keys(MOODS) as Mood[]).map(mood => (
+              <button
+                key={mood}
+                aria-pressed={preferences.mood === mood}
+                onClick={() => onChange({ mood })}
+              >
+                {MOODS[mood].label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="setting-section">
+          <h3>앉을 자리</h3>
+          <p>
+            {preferences.mode === '2d'
+              ? '3D 보기에서 자리를 옮길 수 있어요.'
+              : '같은 자리를 다시 누르면 시점이 원위치로 돌아와요.'}
+          </p>
+          <div
+            className="segmented-control"
+            role="group"
+            aria-label="카메라 시점"
+          >
+            {(
+              [
+                { id: 'room', label: '기본 시점' },
+                { id: 'desk', label: '거실' },
+                { id: 'tv', label: 'TV 정면' },
+              ] as { id: CameraView; label: string }[]
+            ).map(view => (
+              <button
+                key={view.id}
+                disabled={preferences.mode === '2d'}
+                aria-pressed={preferences.camera === view.id}
+                onClick={() => onCamera(view.id)}
+              >
+                {view.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="setting-section">
           <h3>화면 모드</h3>
           <p>2D 보기는 그래픽 부하가 적어요.</p>
